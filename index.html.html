@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProVisors — Troika Planner · East Valley Phoenix · June 11, 2026</title>
+<style>
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F0EEE9;
+  --border: rgba(0,0,0,0.10);
+  --border-med: rgba(0,0,0,0.18);
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #A09E99;
+  --accent: #1D5C3A;
+  --accent-light: #E4F0E9;
+  --accent-mid: #2D7A50;
+  --warn: #8A4800;
+  --warn-bg: #FFF0E0;
+  --danger: #8A1F1F;
+  --danger-bg: #FFF0F0;
+  --info: #1A3A8A;
+  --info-bg: #EEF2FF;
+  --r: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* NAV */
+.nav { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0; padding: 0 24px; height: 52px; position: sticky; top: 0; z-index: 100; }
+.nav-brand { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; margin-right: 28px; flex-shrink: 0; }
+.nav-tabs { display: flex; gap: 0; flex: 1; }
+.nav-tab { padding: 0 18px; height: 52px; display: flex; align-items: center; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s; white-space: nowrap; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--accent); font-weight: 600; border-bottom-color: var(--accent); }
+.nav-badge { background: var(--accent); color: #fff; border-radius: 999px; font-size: 10px; font-weight: 700; padding: 1px 6px; margin-left: 6px; }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); }
+
+/* PAGES */
+.page { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* COMPONENTS */
+.pill { font-size: 10px; padding: 2px 8px; border-radius: 999px; display: inline-block; font-weight: 500; }
+.badge-sm { font-size: 10px; padding: 1px 6px; border-radius: 999px; font-weight: 600; margin-left: 4px; }
+.badge-new { background: #E4F0E9; color: #1D5C3A; }
+.badge-skip { background: var(--warn-bg); color: var(--warn); }
+.badge-lock { background: var(--info-bg); color: var(--info); }
+
+/* PROF COLORS */
+.prof-finance { background: #FAEEDA; color: #633806; }
+.prof-insurance { background: #FAECE7; color: #712B13; }
+.prof-legal { background: #E6F1FB; color: #0C447C; }
+.prof-accounting { background: #EAF3DE; color: #27500A; }
+.prof-realestate { background: #EEEDFE; color: #3C3489; }
+.prof-tech { background: #E1F5EE; color: #085041; }
+.prof-marketing { background: #FBEAF0; color: #72243E; }
+.prof-hr { background: #FAC775; color: #412402; }
+.prof-consulting { background: #F1EFE8; color: #444441; }
+.prof-other { background: #F1EFE8; color: #444441; }
+
+/* BUTTONS */
+.btn { height: 32px; padding: 0 14px; border: 1px solid var(--border-med); border-radius: var(--r); background: var(--surface); color: var(--text); font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: background 0.1s; }
+.btn:hover { background: var(--surface2); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-mid); border-color: var(--accent-mid); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: rgba(138,31,31,0.25); }
+.btn-sm { height: 26px; padding: 0 10px; font-size: 11px; }
+.btn-icon { width: 28px; height: 28px; padding: 0; justify-content: center; }
+
+/* STAT ROW */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 10px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; }
+.stat-val { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 11px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* SEARCH */
+.search-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+.search-input { height: 32px; padding: 0 10px; border: 1px solid var(--border-med); border-radius: var(--r); background: var(--surface); color: var(--text); font-size: 13px; font-family: inherit; width: 220px; }
+.select-input { height: 32px; padding: 0 8px; border: 1px solid var(--border-med); border-radius: var(--r); background: var(--surface); color: var(--text); font-size: 13px; font-family: inherit; }
+
+/* ============ PAGE 1: PROFILES ============ */
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; }
+.pcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px; cursor: pointer; transition: border-color 0.1s, box-shadow 0.1s; }
+.pcard:hover { border-color: var(--accent); }
+.pcard.pcard-skip { opacity: 0.6; border-style: dashed; }
+.pcard-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.pcard-name { font-size: 13px; font-weight: 600; line-height: 1.25; }
+.pcard-title { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.pcard-focus { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 8px; }
+.focus-tag { font-size: 10px; padding: 1px 6px; border-radius: 999px; background: var(--surface2); color: var(--text2); }
+.pcard-stats { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.pstat { flex: 1; text-align: center; }
+.pstat-n { font-size: 15px; font-weight: 700; }
+.pstat-l { font-size: 10px; color: var(--text2); }
+
+/* PROFILE MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; overflow-y: auto; padding: 32px 16px; }
+.modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+.modal { background: var(--surface); border-radius: var(--r-xl); width: 100%; max-width: 560px; padding: 24px; position: relative; }
+.modal-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.modal-avatar { width: 64px; height: 64px; border-radius: 50%; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-name { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+.modal-sub { font-size: 13px; color: var(--text2); }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+.modal-close:hover { background: var(--border); }
+.modal-bio { background: var(--surface2); border-radius: var(--r); padding: 10px 12px; font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+.modal-section { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; margin-top: 14px; }
+.modal-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.modal-stat { background: var(--surface2); border-radius: var(--r); padding: 10px 12px; }
+.modal-stat-lbl { font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+.modal-stat-val { font-size: 14px; font-weight: 700; }
+.troika-entry { border: 1px solid var(--border); border-radius: var(--r); padding: 8px 10px; margin-bottom: 5px; }
+.troika-date { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.troika-members { display: flex; flex-wrap: wrap; gap: 4px; }
+.troika-chip { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: var(--surface2); color: var(--text); }
+.troika-chip.self { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+.freq-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.freq-row:last-child { border: none; }
+.freq-bar { height: 4px; background: var(--accent); border-radius: 2px; min-width: 4px; }
+
+/* ============ PAGE 2: ATTENDANCE ============ */
+.attend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 8px; }
+.acard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; }
+.acard.absent { opacity: 0.45; background: var(--surface2); }
+.acard.skipped { border-color: #EF9F27; opacity: 0.65; }
+.acard-check { width: 18px; height: 18px; border: 1.5px solid var(--border-med); border-radius: 4px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+.acard-check.checked { background: var(--accent); border-color: var(--accent); }
+.acard-check.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+.acard-info { flex: 1; min-width: 0; }
+.acard-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.acard-prof { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.acard-meta { margin-top: 5px; display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+
+/* CONSTRAINTS */
+.constraint-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.constraint-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px; }
+.constraint-item.lock { border-left: 3px solid var(--accent); }
+.constraint-item.skip-c { border-left: 3px solid #EF9F27; }
+.constraint-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.constraint-sub { font-size: 12px; color: var(--text2); }
+.constraint-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.rm-btn { width: 24px; height: 24px; border-radius: 50%; background: var(--surface2); border: none; cursor: pointer; font-size: 14px; color: var(--text2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
+.rm-btn:hover { background: var(--danger-bg); color: var(--danger); }
+.builder { background: var(--surface2); border-radius: var(--r-lg); padding: 14px; margin-top: 10px; }
+.builder-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+
+/* ============ PAGE 3: KANBAN ============ */
+.kanban-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+.kanban-board { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; min-height: 70vh; align-items: flex-start; }
+.kanban-col { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r-lg); min-width: 210px; max-width: 210px; flex-shrink: 0; display: flex; flex-direction: column; }
+.kanban-col.holding { background: #FFF8F0; border-color: #EF9F27; min-width: 220px; max-width: 220px; }
+.kanban-col.locked-col { background: var(--accent-light); border-color: var(--accent); }
+.col-header { padding: 10px 12px 8px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--border); }
+.col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; flex: 1; }
+.col-count { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: var(--surface); color: var(--text2); }
+.col-body { padding: 8px; flex: 1; min-height: 80px; }
+.col-body.drag-over { background: rgba(29,92,58,0.06); border-radius: var(--r); }
+.kcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 9px 10px; margin-bottom: 6px; cursor: grab; user-select: none; transition: box-shadow 0.1s; position: relative; }
+.kcard:hover { border-color: var(--border-med); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.kcard.dragging { opacity: 0.4; cursor: grabbing; }
+.kcard.locked-card { border-left: 3px solid var(--accent); }
+.kcard-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kcard-meta { font-size: 11px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kcard-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+.kcard-warn { font-size: 10px; color: var(--warn); margin-top: 4px; background: var(--warn-bg); border-radius: 4px; padding: 2px 5px; }
+.kcard-actions { display: flex; gap: 3px; margin-top: 6px; }
+.ka-btn { font-size: 10px; padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; }
+.ka-btn:hover { background: var(--border); }
+.col-quality { font-size: 10px; padding: 2px 7px; border-radius: 999px; margin-left: auto; }
+.q-great { background: #E4F0E9; color: #1D5C3A; }
+.q-good { background: #FAEEDA; color: #633806; }
+.q-overlap { background: var(--danger-bg); color: var(--danger); }
+.col-add-btn { margin: 6px 8px 8px; border: 1px dashed var(--border-med); border-radius: var(--r); background: transparent; padding: 6px; font-size: 11px; color: var(--text3); cursor: pointer; width: calc(100% - 16px); text-align: center; }
+.col-add-btn:hover { background: var(--surface); color: var(--text2); }
+.col-del-btn { width: 22px; height: 22px; border-radius: 50%; background: transparent; border: none; cursor: pointer; font-size: 13px; color: var(--text3); display: flex; align-items: center; justify-content: center; }
+.col-del-btn:hover { background: var(--danger-bg); color: var(--danger); }
+
+/* QUALITY BANNER */
+.quality-banner { font-size: 11px; padding: 4px 8px; border-radius: var(--r); margin: 0 8px 6px; text-align: center; font-weight: 600; }
+.qb-great { background: #E4F0E9; color: #1D5C3A; }
+.qb-good { background: #FAEEDA; color: #633806; }
+.qb-overlap { background: var(--danger-bg); color: var(--danger); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; padding: 10px 20px; border-radius: var(--r); font-size: 13px; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+
+/* SECTION HEADER */
+.section-hdr { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; margin-top: 20px; }
+.section-hdr:first-child { margin-top: 0; }
+.page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+/* COLS */
+.two-col { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; }
+
+/* ROSTER PAGE */
+.group-filter-wrap { position:relative; display:inline-block; }
+.group-filter-btn { height:32px; padding:0 10px; border:1px solid var(--border-med); border-radius:var(--r); background:var(--surface); color:var(--text); font-size:13px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.group-filter-btn:hover { background:var(--surface2); }
+.group-filter-btn.active { border-color:var(--accent); color:var(--accent); background:var(--accent-light); }
+.group-dropdown { display:none; position:absolute; top:calc(100% + 4px); left:0; background:var(--surface); border:1px solid var(--border-med); border-radius:var(--r-lg); box-shadow:0 4px 16px rgba(0,0,0,0.12); z-index:50; min-width:220px; padding:6px 0; }
+.group-dropdown.open { display:block; }
+.gd-item { display:flex; align-items:center; gap:8px; padding:7px 12px; font-size:13px; cursor:pointer; }
+.gd-item:hover { background:var(--surface2); }
+.gd-item input[type=checkbox] { accent-color:var(--accent); width:14px; height:14px; flex-shrink:0; cursor:pointer; }
+.gd-divider { height:1px; background:var(--border); margin:4px 0; }
+.acard-group { font-size:10px; color:var(--accent); font-weight:500; margin-top:2px; }
+.acard-group.other-group { color:var(--text3); }
+.rtable { width:100%; border-collapse:collapse; font-size:13px; }
+.rtable th { text-align:left; padding:8px 10px; font-size:11px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); white-space:nowrap; }
+.rtable td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.rtable tr:hover td { background:var(--surface2); }
+.rtable tr.inactive td { opacity:0.45; }
+.rtable tr.added-member td { background:#EEFAF4; }
+.status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; flex-shrink:0; }
+.dot-active { background:#1D9E75; }
+.dot-inactive { background:var(--text3); }
+.dot-new { background:#1A3A8A; }
+.edit-field { width:100%; padding:3px 6px; border:1px solid var(--border-med); border-radius:4px; font-size:12px; font-family:inherit; background:var(--surface); color:var(--text); }
+.edit-field:focus { outline:1px solid var(--accent); }
+.csv-drop { border:2px dashed var(--border-med); border-radius:var(--r-lg); padding:28px 20px; text-align:center; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+.csv-drop:hover, .csv-drop.dragover { border-color:var(--accent); background:var(--accent-light); }
+.csv-drop-icon { font-size:28px; margin-bottom:8px; }
+.csv-drop-label { font-size:14px; font-weight:600; color:var(--text2); margin-bottom:4px; }
+.csv-drop-sub { font-size:12px; color:var(--text3); }
+.csv-preview { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; margin-top:12px; }
+.csv-preview-hdr { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--border); background:var(--surface2); }
+.import-row { display:flex; align-items:center; gap:8px; padding:7px 14px; border-bottom:1px solid var(--border); font-size:12px; }
+.import-row:last-child { border:none; }
+.import-row.conflict { background:#FFF8F0; }
+.import-row.new-row { background:#EEFAF4; }
+.import-badge { font-size:10px; padding:1px 6px; border-radius:999px; white-space:nowrap; }
+.ib-new { background:#E1F5EE; color:#085041; }
+.ib-update { background:#FAEEDA; color:#633806; }
+.ib-skip { background:var(--surface2); color:var(--text3); }
+.new-meeting-panel { background:var(--info-bg); border:1px solid rgba(26,58,138,0.2); border-radius:var(--r-lg); padding:16px 18px; }
+.divider { height:1px; background:var(--border); margin:24px 0; }
+.hist-empty { text-align:center; padding:60px 20px; color:var(--text3); font-size:14px; }
+.hist-month { margin-bottom:28px; }
+.hist-month-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+.hist-month-title { font-size:17px; font-weight:700; }
+.hist-month-meta { font-size:12px; color:var(--text2); }
+.hist-session { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); margin-bottom:10px; overflow:hidden; }
+.hist-session-hdr { display:flex; align-items:center; gap:10px; padding:12px 16px; cursor:pointer; }
+.hist-session-hdr:hover { background:var(--surface2); }
+.hist-session-date { font-size:14px; font-weight:700; flex:1; }
+.hist-session-counts { font-size:12px; color:var(--text2); }
+.hist-session-chevron { font-size:14px; color:var(--text3); transition:transform 0.2s; }
+.hist-session-chevron.open { transform:rotate(90deg); }
+.hist-session-body { display:none; padding:0 16px 14px; }
+.hist-session-body.open { display:block; }
+.hist-troika-row { display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.hist-troika-row:last-child { border:none; }
+.hist-troika-num { font-size:11px; font-weight:700; color:var(--text3); width:56px; flex-shrink:0; padding-top:2px; }
+.hist-troika-members { display:flex; flex-wrap:wrap; gap:5px; flex:1; }
+.hist-chip { font-size:11px; padding:2px 9px; border-radius:999px; background:var(--surface2); color:var(--text); }
+.hist-chip.locked { background:var(--accent-light); color:var(--accent); }
+.hist-del-btn { font-size:11px; padding:2px 8px; border-radius:4px; border:1px solid var(--border); background:transparent; color:var(--danger); cursor:pointer; flex-shrink:0; }
+.hist-del-btn:hover { background:var(--danger-bg); }
+.save-bar { background:var(--accent-light); border:1px solid rgba(29,92,58,0.3); border-radius:var(--r-lg); padding:12px 16px; margin-bottom:14px; display:none; align-items:center; gap:10px; flex-wrap:wrap; }
+.save-bar.visible { display:flex; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">ProVisors</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('profiles')">Member profiles</div>
+    <div class="nav-tab" onclick="showPage('attendance')">Attendance &amp; constraints</div>
+    <div class="nav-tab" onclick="showPage('board')">Troika board <span class="nav-badge" id="board-badge">0</span></div>
+    <div class="nav-tab" onclick="showPage('history')">History <span class="nav-badge" id="hist-badge" style="background:var(--text3)">0</span></div>
+    <div class="nav-tab" onclick="showPage('roster')">Roster <span class="nav-badge" id="roster-badge" style="background:var(--text3)">0</span></div>
+  </div>
+  <div class="nav-right">East Valley Phoenix &nbsp;·&nbsp; June 11, 2026</div>
+</nav>
+
+<!-- ===================== PAGE 1: PROFILES ===================== -->
+<div class="page active" id="page-profiles">
+  <div class="page-title">Member profiles</div>
+  <div class="page-sub">35 registered members · click any card to view full profile and troika history</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-val" id="s1-total">35</div><div class="stat-lbl">Registered</div></div>
+    <div class="stat-card"><div class="stat-val" id="s1-hist">0</div><div class="stat-lbl">With history</div></div>
+    <div class="stat-card"><div class="stat-val" id="s1-none">0</div><div class="stat-lbl">No history yet</div></div>
+    <div class="stat-card"><div class="stat-val" id="s1-avg">0</div><div class="stat-lbl">Avg troikas</div></div>
+  </div>
+
+  <div class="search-row">
+    <input class="search-input" id="p1-search" placeholder="Search name, company, focus…" oninput="renderProfiles()">
+    <select class="select-input" id="p1-prof" onchange="renderProfiles()"><option value="">All professions</option></select>
+    <select class="select-input" id="p1-filter" onchange="renderProfiles()">
+      <option value="">All members</option>
+      <option value="has">Has troika history</option>
+      <option value="none">No history yet</option>
+      <option value="new">New in 2026</option>
+    </select>
+    <div class="group-filter-wrap">
+      <button class="group-filter-btn" id="p1-group-btn" onclick="toggleGroupDropdown('p1-groups-dd')">Group <span id="p1-group-count" style="background:var(--accent);color:#fff;border-radius:999px;font-size:10px;padding:1px 5px;display:none">0</span> ▾</button>
+      <div class="group-dropdown" id="p1-groups-dd"></div>
+    </div>
+  </div>
+  <div class="profile-grid" id="profile-grid"></div>
+</div>
+
+<!-- ===================== PAGE 2: ATTENDANCE ===================== -->
+<div class="page" id="page-attendance">
+  <div class="page-title">Attendance &amp; constraints</div>
+  <div class="page-sub">Mark who is present today, set opt-outs, and record requested pairings</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-val" id="s2-present" style="color:var(--accent)">0</div><div class="stat-lbl">Present</div></div>
+    <div class="stat-card"><div class="stat-val" id="s2-absent" style="color:var(--text3)">35</div><div class="stat-lbl">Absent / not marked</div></div>
+    <div class="stat-card"><div class="stat-val" id="s2-skip" style="color:var(--warn)">1</div><div class="stat-lbl">Opted out</div></div>
+    <div class="stat-card"><div class="stat-val" id="s2-lock" style="color:var(--info)">1</div><div class="stat-lbl">Locked troikas</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <div class="section-hdr">Attendance checklist</div>
+      <div class="search-row">
+        <input class="search-input" id="a-search" placeholder="Search…" oninput="renderAttendance()">
+        <div class="group-filter-wrap">
+          <button class="group-filter-btn" id="a-group-btn" onclick="toggleGroupDropdown('a-groups-dd')">Group <span id="a-group-count" style="background:var(--accent);color:#fff;border-radius:999px;font-size:10px;padding:1px 5px;display:none">0</span> ▾</button>
+          <div class="group-dropdown" id="a-groups-dd"></div>
+        </div>
+        <button class="btn btn-primary" onclick="markAllPresent()">Mark all present</button>
+        <button class="btn" onclick="markFilteredPresent()">Mark filtered present</button>
+        <button class="btn" onclick="clearAll()">Clear all</button>
+        <button class="btn" onclick="toggleWalkinPanel()" id="walkin-toggle-btn">+ Walk-in</button>
+      </div>
+
+      <div id="walkin-panel" style="display:none;background:var(--info-bg);border:1px solid rgba(26,58,138,0.2);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:600;color:var(--info);margin-bottom:10px">Add walk-in guest</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Full name *</div>
+            <input class="search-input" id="wi-name" placeholder="e.g. Sarah Mitchell" style="width:100%">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Title / role</div>
+            <input class="search-input" id="wi-title" placeholder="e.g. Attorney" style="width:100%">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Company</div>
+            <input class="search-input" id="wi-company" placeholder="e.g. Acme Law Group" style="width:100%">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Profession *</div>
+            <select class="select-input" id="wi-prof" style="width:100%">
+              <option value="">Select profession…</option>
+              <option>Attorney</option>
+              <option>Accountant</option>
+              <option>Financial Service</option>
+              <option>Banking &amp; Finance</option>
+              <option>Investment Advisor</option>
+              <option>Insurance</option>
+              <option>Real Estate</option>
+              <option>Information Technology</option>
+              <option>Marketing</option>
+              <option>Human Resources</option>
+              <option>Consultant &amp; Service</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Professional focus (comma-separated)</div>
+          <input class="search-input" id="wi-focus" placeholder="e.g. Business Litigation, Contracts" style="width:100%">
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-primary" onclick="addWalkin()">Add &amp; mark present</button>
+          <button class="btn" onclick="toggleWalkinPanel()">Cancel</button>
+          <span id="wi-error" style="font-size:12px;color:var(--danger);display:none">Please enter a name and profession.</span>
+        </div>
+      </div>
+
+      <div id="walkin-list-hdr" style="display:none" class="section-hdr">Walk-ins <span id="walkin-count" style="font-weight:400;color:var(--text3)"></span></div>
+      <div class="attend-grid" id="walkin-grid" style="margin-bottom:12px"></div>
+      <div class="attend-grid" id="attend-grid"></div>
+    </div>
+
+    <div>
+      <div class="section-hdr">Constraints</div>
+      <div class="constraint-list" id="constraint-list"></div>
+
+      <div class="panel" style="margin-top:10px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px">Add constraint</div>
+        <select class="select-input" id="c-type" onchange="updateConstraintUI()" style="width:100%;margin-bottom:8px">
+          <option value="lock">Lock together (requested pairing)</option>
+          <option value="skip">Opt out of troikas</option>
+        </select>
+        <div id="c-people-row" style="display:flex;flex-direction:column;gap:6px">
+          <select class="select-input" id="c-p1" style="width:100%"><option value="">Select person…</option></select>
+          <div id="c-extra-selects">
+            <select class="select-input" id="c-p2" style="width:100%;margin-bottom:6px"><option value="">Select partner…</option></select>
+            <select class="select-input" id="c-p3" style="width:100%"><option value="">3rd person (optional)…</option></select>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <button class="btn btn-primary" onclick="addConstraint()">+ Add constraint</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE 3: KANBAN BOARD ===================== -->
+<div class="page" id="page-board">
+  <div class="page-title">Troika assignment board</div>
+  <div class="page-sub" id="board-sub">Generate groups, then drag cards to adjust assignments</div>
+
+  <div class="kanban-toolbar">
+    <select class="select-input" id="algo">
+      <option value="complement">Maximize complementarity (avoid repeat pairs)</option>
+      <option value="diverse">Maximize profession diversity</option>
+      <option value="new-first">Prioritize new members in varied groups</option>
+    </select>
+    <button class="btn btn-primary" id="generate-btn" onclick="handleGenerateClick()">⟳ Generate troikas</button>
+    <button class="btn" onclick="addTroikaCol()">+ Add group</button>
+    <button class="btn" onclick="copyResults()">↓ Copy</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <label style="font-size:12px;color:var(--text2);white-space:nowrap">Meeting date</label>
+        <input type="date" id="board-date" class="search-input" style="width:150px" onchange="checkSavedDate()">
+      </div>
+      <button class="btn" id="save-btn" onclick="saveAssignment()" style="background:var(--accent-light);color:var(--accent);border-color:rgba(29,92,58,0.3);display:none">✓ Save assignment</button>
+    </div>
+  </div>
+
+  <div id="date-saved-warn" style="display:none;background:var(--warn-bg);border:1px solid rgba(138,72,0,0.25);border-radius:var(--r-lg);padding:9px 14px;margin-bottom:10px;font-size:12px;color:var(--warn);display:none;align-items:center;gap:10px;flex-wrap:wrap">
+    <span>⚠ An assignment for this date is already saved.</span>
+    <span style="color:var(--text2)">Saving again will replace it.</span>
+  </div>
+
+  <div id="regen-confirm" style="display:none;background:#FFF8F0;border:1px solid rgba(138,72,0,0.25);border-radius:var(--r-lg);padding:10px 14px;margin-bottom:10px;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:13px;color:var(--warn);font-weight:500">⚠ This assignment has been saved.</span>
+    <span style="font-size:12px;color:var(--warn)">Regenerating will clear the board — you'll need to save again when done.</span>
+    <button class="btn btn-primary btn-sm" onclick="confirmRegenerate()">Yes, regenerate</button>
+    <button class="btn btn-sm" onclick="cancelRegenerate()">Cancel</button>
+  </div>
+
+  <div id="board-opted-out" style="display:none;background:var(--warn-bg);border:1px solid rgba(138,72,0,0.2);border-radius:var(--r-lg);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--warn)">
+    <span style="font-weight:600">Opted out / absent — not in pool:</span>
+    <span id="board-opted-names" style="margin-left:6px"></span>
+  </div>
+
+  <div class="kanban-board" id="kanban-board">
+    <div style="color:var(--text3);font-size:13px;padding:40px 20px;text-align:center;width:100%">Click "Generate troikas" to create assignments from present members, then drag to adjust.</div>
+  </div>
+</div>
+
+<!-- ===================== PAGE 4: HISTORY ===================== -->
+<div class="page" id="page-history">
+  <div class="page-title">Assignment history</div>
+  <div class="page-sub">Saved troika assignments by meeting date · East Valley Phoenix</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-val" id="h-sessions">0</div><div class="stat-lbl">Saved sessions</div></div>
+    <div class="stat-card"><div class="stat-val" id="h-troikas">0</div><div class="stat-lbl">Total troikas</div></div>
+    <div class="stat-card"><div class="stat-val" id="h-members">0</div><div class="stat-lbl">Unique members placed</div></div>
+    <div class="stat-card"><div class="stat-val" id="h-last" style="font-size:14px;padding-top:4px">—</div><div class="stat-lbl">Last saved</div></div>
+  </div>
+
+  <div id="hist-container"></div>
+</div>
+
+<!-- ===================== PAGE 5: ROSTER ===================== -->
+<div class="page" id="page-roster">
+  <div class="page-title">Roster management</div>
+  <div class="page-sub">Add members, import from CSV, manage active status, and start a new meeting</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-val" id="r-total">0</div><div class="stat-lbl">Total members</div></div>
+    <div class="stat-card"><div class="stat-val" id="r-active" style="color:var(--accent)">0</div><div class="stat-lbl">Active</div></div>
+    <div class="stat-card"><div class="stat-val" id="r-inactive" style="color:var(--text3)">0</div><div class="stat-lbl">Inactive</div></div>
+    <div class="stat-card"><div class="stat-val" id="r-added" style="color:var(--info)">0</div><div class="stat-lbl">Added this session</div></div>
+  </div>
+
+  <!-- NEW MEETING -->
+  <div class="new-meeting-panel" style="margin-bottom:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--info);margin-bottom:4px">🗓 Start a new meeting</div>
+        <div style="font-size:13px;color:var(--text2)">Resets attendance, constraints, and the board for a fresh session. Member roster and history are preserved.</div>
+      </div>
+      <button class="btn" id="new-meeting-btn" onclick="showNewMeetingConfirm()" style="background:var(--info-bg);color:var(--info);border-color:rgba(26,58,138,0.3);white-space:nowrap">New meeting</button>
+    </div>
+    <div id="new-meeting-confirm" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(26,58,138,0.2)">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--warn)">⚠ This will clear attendance, constraints, and the board.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:3px">New meeting date</div>
+          <input type="date" id="new-meeting-date" class="search-input" style="width:160px">
+        </div>
+        <div style="display:flex;gap:6px;align-items:flex-end">
+          <button class="btn btn-primary" onclick="startNewMeeting()">Confirm &amp; reset</button>
+          <button class="btn btn-sm" onclick="hideNewMeetingConfirm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="gap:24px">
+    <!-- LEFT: ROSTER TABLE -->
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <div class="section-hdr" style="margin:0">Member roster</div>
+        <div style="flex:1"></div>
+        <input class="search-input" id="r-search" placeholder="Search…" oninput="renderRosterTable()" style="width:180px">
+        <select class="select-input" id="r-filter" onchange="renderRosterTable()">
+          <option value="active">Active only</option>
+          <option value="all">All members</option>
+          <option value="inactive">Inactive only</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="showAddMemberForm()">+ Add member</button>
+      </div>
+
+      <!-- ADD MEMBER FORM -->
+      <div id="add-member-form" style="display:none;background:var(--info-bg);border:1px solid rgba(26,58,138,0.2);border-radius:var(--r-lg);padding:14px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:600;color:var(--info);margin-bottom:10px">Add new member</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Full name *</div><input class="search-input" id="am-name" placeholder="First Last" style="width:100%"></div>
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Title</div><input class="search-input" id="am-title" placeholder="e.g. Partner" style="width:100%"></div>
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Company</div><input class="search-input" id="am-company" placeholder="e.g. Acme Law" style="width:100%"></div>
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Profession *</div>
+            <select class="select-input" id="am-prof" style="width:100%">
+              <option value="">Select…</option>
+              <option>Attorney</option><option>Accountant</option><option>Financial Service</option>
+              <option>Banking &amp; Finance</option><option>Investment Advisor</option><option>Insurance</option>
+              <option>Real Estate</option><option>Information Technology</option><option>Marketing</option>
+              <option>Human Resources</option><option>Consultant &amp; Service</option><option>Other</option>
+            </select>
+          </div>
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Focus areas (comma-separated)</div><input class="search-input" id="am-focus" placeholder="e.g. Taxation, Business Tax" style="width:100%"></div>
+          <div><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Role badge (GL, TM, CPA…)</div><input class="search-input" id="am-role" placeholder="optional" style="width:100%"></div>
+        </div>
+
+        <!-- GROUP FIELD -->
+        <div style="margin-bottom:8px;background:rgba(26,58,138,0.06);border-radius:var(--r);padding:10px 12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <input type="checkbox" id="am-our-group" checked onchange="toggleGroupField()" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent)">
+            <label for="am-our-group" style="font-size:13px;font-weight:500;cursor:pointer">Member of our group <span style="color:var(--accent);font-weight:600" id="our-group-label">East Valley Phoenix 5</span></label>
+          </div>
+          <div id="am-other-group-row" style="display:none">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:3px">Home group *</div>
+            <div style="position:relative">
+              <input class="search-input" id="am-group" placeholder="e.g. North Scottsdale, Costa Mesa…" style="width:100%" oninput="groupAutocomplete()" onkeydown="groupKeydown(event)" autocomplete="off">
+              <div id="group-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border-med);border-radius:var(--r);box-shadow:0 4px 12px rgba(0,0,0,0.12);z-index:50;max-height:160px;overflow-y:auto"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">Short bio</div><input class="search-input" id="am-bio" placeholder="optional" style="width:100%"></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-primary" onclick="addMemberFromForm()">Add member</button>
+          <button class="btn btn-sm" onclick="hideAddMemberForm()">Cancel</button>
+          <span id="am-error" style="font-size:12px;color:var(--danger);display:none">Name and profession required.</span>
+        </div>
+      </div>
+
+      <div class="roster-table-wrap">
+        <table class="rtable">
+          <thead><tr>
+            <th style="width:28px"></th>
+            <th>Name</th>
+            <th>Profession</th>
+            <th>Company</th>
+            <th>Focus</th>
+            <th>Group</th>
+            <th>Since</th>
+            <th style="width:80px">Status</th>
+            <th style="width:60px"></th>
+          </tr></thead>
+          <tbody id="roster-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RIGHT: CSV IMPORT -->
+    <div>
+      <div class="section-hdr" style="margin-top:0">Import from CSV</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6">
+        Export the member list from ProVisors as CSV, then drop it here or paste the content below. The importer matches on <strong>full name</strong> — existing members are updated, new names are added.
+      </div>
+
+      <div class="csv-drop" id="csv-drop" onclick="document.getElementById('csv-file-input').click()" ondragover="csvDragOver(event)" ondragleave="csvDragLeave(event)" ondrop="csvDrop(event)">
+        <div class="csv-drop-icon">📄</div>
+        <div class="csv-drop-label">Drop CSV file here</div>
+        <div class="csv-drop-sub">or click to browse · also accepts paste below</div>
+      </div>
+      <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="csvFileSelected(event)">
+
+      <div style="margin-top:10px">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Or paste CSV / tab-separated data</div>
+        <textarea id="csv-paste" rows="5" placeholder="Name, Profession, Professional Focus, Company, Title&#10;John Smith, Attorney, Business Litigation, Smith Law, Partner" style="width:100%;padding:8px;border:1px solid var(--border-med);border-radius:var(--r);font-size:12px;font-family:monospace;background:var(--surface);color:var(--text);resize:vertical"></textarea>
+        <button class="btn btn-sm" style="margin-top:6px" onclick="parseCsvPaste()">Preview import</button>
+      </div>
+
+      <div id="csv-preview-panel" style="display:none;margin-top:14px">
+        <div class="csv-preview">
+          <div class="csv-preview-hdr">
+            <span id="csv-preview-title" style="font-size:13px;font-weight:600"></span>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-primary btn-sm" onclick="applyImport()">Import all</button>
+              <button class="btn btn-sm" onclick="clearCsvPreview()">Clear</button>
+            </div>
+          </div>
+          <div id="csv-preview-rows"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-hdr">Expected CSV columns</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8;background:var(--surface2);padding:10px 12px;border-radius:var(--r)">
+        <strong>Required:</strong> Name &nbsp;·&nbsp; Profession<br>
+        <strong>Optional:</strong> Professional Focus &nbsp;·&nbsp; Company &nbsp;·&nbsp; Title &nbsp;·&nbsp; Short Bio &nbsp;·&nbsp; Member Since<br><br>
+        Column names are flexible — the importer looks for keywords. First row must be a header.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const PC={
+  "Financial Service":"finance","Banking & Finance":"finance","Banking/Finance":"finance",
+  "Investment Advisor":"finance","Insurance":"insurance","Attorney":"legal",
+  "Accountant":"accounting","Real Estate":"realestate","Information Technology":"tech",
+  "Marketing":"marketing","Human Resources":"hr","Consultant & Service":"consulting",
+  "Consultant":"consulting","Other":"other"
+};
+const MEMBERS=[
+  {id:"ademola",name:"David Ademola",role:"GL",title:"Director of Integrations",company:"PayNation, LLC",prof:"Financial Service",focus:["Business Service","Consulting"],ms:"Oct 2023",skipped:false,bio:"Payment expert integrating Credit Card & ACH solutions into online stores, accounting software, ERP and POS systems. Specializes in Healthcare, Manufacturers, Distributors, Wholesalers & SAAS.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Ademola","Lisa Riley","Nick Beach","Shawn Charles"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["David Ademola","Grant Cragun","Kalgi Ganatra","Stan Nelson"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Ademola","Nick Beach","Spencer Perkinson"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Adam Ashby","David Ademola","Julian McMahon"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Bill Stevens","David Ademola","Scott Beilke","Shawn Gill, CPA"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Bill Stevens","Christie Ellis","David Ademola"]}]},
+  {id:"beach",name:"Nick Beach",role:"",title:"Benefits Consultant",company:"Strunk Insurance Group",prof:"Insurance",focus:["Employee Benefits"],ms:"Mar 2025",skipped:false,bio:"Benefits consultant specializing in employee benefits across industries. Committed advocate for clients.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Ademola","Lisa Riley","Nick Beach","Shawn Charles"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Cathy Parcesepe","Julian McMahon","Nick Beach","Ryan Armstrong","Shawn Charles"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Ademola","Nick Beach","Spencer Perkinson"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Nick Beach","Richard Barrett","Spencer Perkinson"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Denise Kirwan","Nick Beach","Spencer Perkinson"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Caitlin Penny","Gary Leneway","Nick Beach"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Joe Scarpignato","Joel Del Rosario","Nick Beach"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Anne Brown","Julian McMahon","Nick Beach"]}]},
+  {id:"carter",name:"Ryan Carter",role:"",title:"CFO / CPA, MBA",company:"Clifton Larson Allen",prof:"Accountant",focus:["Fractional CFO"],ms:"Nov 2025",skipped:false,bio:"Licensed CPA (AZ & OR) with MBA and 25+ years in public accounting and private industry.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Kevin Hawkes","Peter Fan","Ryan Carter"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Art Shalomov","Ryan Carter","Spencer Perkinson"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Hawks","Ryan Carter","Shawn Gill, CPA"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Bill Stevens","Laura Rolfe","Ryan Carter"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Ardene Fox","Nate Hill","Ryan Carter"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Grant Cragun","Ryan Carter","Todd Larson ASA"]}]},
+  {id:"charles",name:"Shawn Charles",role:"",title:"Owner",company:"Oasis Senior Advisors",prof:"Other",focus:["Elder Care"],ms:"Feb 2025",skipped:false,bio:"Certified Senior Advisor & Certified Dementia Practitioner. Helps families navigate assisted living placement.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Ademola","Lisa Riley","Nick Beach","Shawn Charles"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Cathy Parcesepe","Julian McMahon","Nick Beach","Ryan Armstrong","Shawn Charles"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Chris Patience","Nate Hill","Shawn Charles"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Joe Scarpignato","Shawn Charles"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Chuck Ertl","Grant Cragun","Laura Rolfe","Shawn Charles"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Julian McMahon","Nate Hill","Shawn Charles","Stan Nelson"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Laura Rolfe","Shawn Charles"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Bill Stevens","Michael Clemente","Shawn Charles"]}]},
+  {id:"cragun",name:"Grant Cragun",role:"",title:"Litigation Attorney",company:"Kercsmar & O'Hara PLLC",prof:"Attorney",focus:["Business Litigation"],ms:"May 2025",skipped:false,bio:"Litigation attorney representing businesses. Helps clients navigate and protect their business interests.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Grant Cragun","Joe Scarpignato","Shawn Gill, CPA"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["David Ademola","Grant Cragun","Kalgi Ganatra","Stan Nelson"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Adam Ashby","Grant Cragun","Kevin Hawkes"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["David Hawks","Denise Kirwan","Grant Cragun","Nate Hill"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Chuck Ertl","Grant Cragun","Laura Rolfe","Shawn Charles"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Grant Cragun","Ryan Carter","Todd Larson ASA"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Grant Cragun","Spencer Perkinson"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Grant Cragun","Joe Scarpignato","Michael Clemente"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Chris Patience","Gary Johnson","Grant Cragun","Tim Palmer"]}]},
+  {id:"cusack",name:"Joe Cusack",role:"EC",title:"Managing Director & Broker",company:"Northern AZ Business Brokers",prof:"Consultant & Service",focus:["Business Broker","M&A","Private Equity"],ms:"Jan 2025",skipped:false,bio:"MBA, CExP. Managing Director specializing in business brokerage, valuations, M&A, franchising, and private equity.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Bill Stevens","Caitlin Penny","Joe Cusack"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Joe Cusack","Michael Migdol","Shawn Gill, CPA"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Chuck Ertl","Joe Cusack","Shawn Gill, CPA"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Art Shalomov","Joe Cusack","Stan Nelson"]}]},
+  {id:"ertl",name:"Chuck Ertl",role:"",title:"Vice President",company:"MidFirst Bank",prof:"Banking & Finance",focus:["Commercial Banking","Cash Flow Management"],ms:"Aug 2025",skipped:false,bio:"Vice President at MidFirst Bank. Commercial and private banking, cash flow management, strategic business planning.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Adam Ashby","Chuck Ertl","Stan Nelson"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Adam Ashby","Chuck Ertl","Claire Thornton","Nate Hill"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Bill Stevens","Chuck Ertl","Kara Showley"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Chuck Ertl","Joe Cusack","Shawn Gill, CPA"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Chuck Ertl","Grant Cragun","Laura Rolfe","Shawn Charles"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Brian Suddarth","Chuck Ertl","David Hawks","Julian McMahon"]},{d:"Jun 2025",g:"East Valley Phoenix",m:["Chuck Ertl","David Hawks","Nate Hill"]}]},
+  {id:"fox",name:"Ardene Fox",role:"",title:"Attorney / Founder",company:"Fox Law Group, P.C.",prof:"Attorney",focus:["Family Law","Divorce","Custody"],ms:"Oct 2025",skipped:false,bio:"Founder of Fox Law Group. Wellness-centered representation in divorce, custody, mediation, and DCS matters.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Don Hulke","Sumeet Pall"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Julian McMahon"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Ardene Fox","Nate Hill","Ryan Carter"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Ardene Fox","David Hawks","Gary Johnson"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Ardene Fox","David Ademola","Ryan Olson"]}]},
+  {id:"gill",name:"Shawn Gill",role:"CPA",title:"Principal & Tax Strategist",company:"NeutronTax",prof:"Accountant",focus:["Taxation","Tax Strategy"],ms:"Aug 2025",skipped:false,bio:"CPA & MST. Helps high-earning business owners and real estate investors with tax strategy and compliance.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Grant Cragun","Joe Scarpignato","Shawn Gill, CPA"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Joe Cusack","Michael Migdol","Shawn Gill, CPA"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Hawks","Ryan Carter","Shawn Gill, CPA"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Chuck Ertl","Joe Cusack","Shawn Gill, CPA"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Bill Stevens","Chris Badulescu","Shawn Gill, CPA"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Bill Stevens","David Ademola","Scott Beilke","Shawn Gill, CPA"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Charl Riggs","Chuck Ertl","Denise Kirwan","Shawn Gill, CPA"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Art Shalomov","Nadia Brown","Shawn Gill, CPA"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Joe Scarpignato","Shawn Gill"]}]},
+  {id:"greenberg",name:"Benjamin Greenberg",role:"TM",title:"COO / Principal",company:"Four Corners Valuations",prof:"Real Estate",focus:["Commercial Appraisal","Litigation Support","M&A"],ms:"Sep 2024",skipped:false,bio:"Commercial valuation real estate advisor. $50B+ in real estate advised. Works closely with Attorneys, CPAs, and Business Advisors.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Carla Magee","Laura Rolfe"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Kevin Hawkes","Ryan Heimbach","Sumeet Pall"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Joe Scarpignato","Laura Rolfe"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Nick Beach","Richard Barrett","Spencer Perkinson"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Bill Stevens","Brint Hiatt"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Laura Rolfe","Shawn Charles"]}]},
+  {id:"hawkes",name:"Kevin Hawkes",role:"",title:"Registered Patent Attorney",company:"IPTechLaw",prof:"Attorney",focus:["Intellectual Property","Patents","Trademarks"],ms:"Feb 2026",skipped:false,bio:"Registered patent attorney specializing in helping clients obtain valuable patents and trademarks.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Kevin Hawkes","Peter Fan","Ryan Carter"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Kevin Hawkes","Ryan Heimbach","Sumeet Pall"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Adam Ashby","Grant Cragun","Kevin Hawkes"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Kevin Hawkes","Stan Nelson"]}]},
+  {id:"hawks",name:"David Hawks",role:"",title:"Tax Partner",company:"Colby & Powell, PLC",prof:"Accountant",focus:["Taxation","Business Tax","Nonprofit Tax"],ms:"May 2025",skipped:false,bio:"CPA, EA. Tax partner with 10+ years in business, individual, trust, and nonprofit taxation.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Hawks","Kara Showley","Nate Hill"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Kevin Hawkes","Ryan Heimbach","Sumeet Pall"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Hawks","Ryan Carter","Shawn Gill, CPA"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["David Hawks","Denise Kirwan","Grant Cragun","Nate Hill"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Julian McMahon"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Ardene Fox","David Hawks","Gary Johnson"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Brian Suddarth","Chuck Ertl","David Hawks","Julian McMahon"]},{d:"Jun 2025",g:"East Valley Phoenix",m:["Chuck Ertl","David Hawks","Nate Hill"]}]},
+  {id:"hill",name:"Nate Hill",role:"",title:"Employment & Litigation Attorney",company:"Sun State Legal",prof:"Attorney",focus:["Labor/Employment","Commercial Litigation"],ms:"Aug 2025",skipped:false,bio:"Employment and Commercial Litigation Attorney.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Hawks","Kara Showley","Nate Hill"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Adam Ashby","Chuck Ertl","Claire Thornton","Nate Hill"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Chris Patience","Nate Hill","Shawn Charles"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["David Hawks","Denise Kirwan","Grant Cragun","Nate Hill"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Ardene Fox","Nate Hill","Ryan Carter"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Julian McMahon","Nate Hill","Shawn Charles","Stan Nelson"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Caitlin Penny","Chris Patience","Nate Hill"]},{d:"Jun 2025",g:"East Valley Phoenix",m:["Chuck Ertl","David Hawks","Nate Hill"]}]},
+  {id:"hoffman",name:"Amy Hoffman",role:"",title:"Commercial Litigator / Appellate",company:"Frost LLP",prof:"Attorney",focus:["Business Litigation","Appellate"],ms:"Oct 2025",skipped:false,bio:"Experienced commercial litigator and appellate attorney. Breaches of contract, business divorce, injunctions, and appeals.",
+  t:[{d:"Apr 2026",g:"Phoenix 4",m:["Amy Hoffman","Ashley Adams","Chris Kaup","Ryan Heimbach"]},{d:"Mar 2026",g:"Downtown Phoenix",m:["Amy Hoffman","Gavin Thompson","Michael Ubaldini"]},{d:"Feb 2026",g:"Downtown Phoenix",m:["Amy Hoffman","Jason Gard","Juan Ros"]},{d:"Nov 2025",g:"Phoenix 4",m:["Amy Hoffman","Ashley Adams","Jason Castle"]}]},
+  {id:"howard",name:"Elisia Howard",role:"",title:"—",company:"—",prof:"Other",focus:["—"],ms:"—",skipped:false,bio:"Profile not yet completed on Provisor.",t:[]},
+  {id:"hulke",name:"Don Hulke",role:"",title:"Founder & Managing Director",company:"Legion Financial, LLC",prof:"Financial Service",focus:["Litigation Support"],ms:"Mar 2026",skipped:false,bio:"Founder & Managing Director of Legion Financial. Specializes in financial litigation support.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Don Hulke","Sumeet Pall"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Caitlin Penny","David Ademola","Don Hulke"]}]},
+  {id:"johnson",name:"Gary Johnson",role:"GL",title:"President",company:"J2 Marketing Consultants",prof:"Marketing",focus:["Business Coach","Marketing/Branding"],ms:"Apr 2016",skipped:true,bio:"Business development and marketing coach. Home group: Costa Mesa. Opted out of June 11.",
+  t:[{d:"Nov 2025",g:"East Valley Phoenix",m:["Ardene Fox","David Hawks","Gary Johnson"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Art Shalomov","David Hawks","Gary Johnson"]}]},
+  {id:"jones",name:"Lisa Jones",role:"",title:"CEO",company:"Enspyire",prof:"Consultant & Service",focus:["Consulting"],ms:"—",skipped:false,bio:"CEO of Enspyire. Business consulting services.",t:[]},
+  {id:"mcmahon",name:"Julian McMahon",role:"",title:"Financial Advisor / CDFA",company:"F-Squared Advisors",prof:"Investment Advisor",focus:["Employee Benefits","Wealth Management","401k"],ms:"Mar 2025",skipped:false,bio:"CPFA & CDFA. Optimizes 401(k) plans for business owners. Expert witness in divorce financial proceedings.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Julian McMahon","Spencer Perkinson"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Cathy Parcesepe","Julian McMahon","Nick Beach","Ryan Armstrong","Shawn Charles"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Julian McMahon"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Adam Ashby","David Ademola","Julian McMahon"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Julian McMahon"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Joe Scarpignato","Julian McMahon","Rachel Durkot"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Julian McMahon","Nate Hill","Shawn Charles","Stan Nelson"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Brian Suddarth","Chuck Ertl","David Hawks","Julian McMahon"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Anne Brown","Julian McMahon","Nick Beach"]},{d:"Jul 2025",g:"East Valley Phoenix",m:["Grant Cragun","Julian McMahon","Laura Rolfe"]}]},
+  {id:"meidinger",name:"Darryl Meidinger",role:"",title:"Fractional CIO / Executive Coach",company:"—",prof:"Information Technology",focus:["Cybersecurity","AI","Risk Management","Fractional CIO"],ms:"—",skipped:false,bio:"IT consultant and executive coach. Cybersecurity, AI, risk management, M&A, and fractional CIO services.",t:[]},
+  {id:"migdol",name:"Michael Migdol",role:"",title:"Partner",company:"Custom HCM",prof:"Information Technology",focus:["Payroll & HR Tech","Employee Benefits","Healthcare"],ms:"Nov 2025",skipped:false,bio:"Helps businesses find perfect Payroll and HR Technology to streamline operations and maximize profitability.",
+  t:[{d:"Apr 2026",g:"North Scottsdale",m:["Elina Magaly Santana","Larry Pezzuto","Michael Migdol","Ryan Heimbach"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Joe Cusack","Michael Migdol","Shawn Gill, CPA"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Michael Migdol","Nathan Moayyad","Stan Nelson"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Adam Ashby","Joe Scarpignato","Michael Migdol"]}]},
+  {id:"pall",name:"Sumeet Pall",role:"",title:"Co-Founder",company:"VirtueStaff",prof:"Human Resources",focus:["Executive Recruiting"],ms:"Apr 2026",skipped:false,bio:"Co-Founder of VirtueStaff. Executive recruiting.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Don Hulke","Sumeet Pall"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","David Hawks","Kevin Hawkes","Ryan Heimbach","Sumeet Pall"]}]},
+  {id:"penny",name:"Caitlin Penny",role:"",title:"CEO / Brand Expert",company:"Copper Theory Creative",prof:"Marketing",focus:["Marketing/Branding"],ms:"May 2025",skipped:false,bio:"BFA. Helping Purpose-Driven Businesses Build Unapologetic, High-Impact Brands.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Bill Stevens","Caitlin Penny","Joe Cusack"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Joe Cusack","Michael Migdol","Shawn Gill, CPA"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Michael Migdol","Nathan Moayyad","Stan Nelson"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Caitlin Penny","Kevin Hawkes","Stan Nelson"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Caitlin Penny","David Ademola","Don Hulke"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Caitlin Penny","Gary Leneway","Nick Beach"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Adam Ashby","Art Shalomov","Caitlin Penny"]}]},
+  {id:"perkinson",name:"Spencer Perkinson",role:"",title:"Insurance Agent",company:"LeBaron & Carroll Insurance",prof:"Insurance",focus:["Commercial Insurance"],ms:"Aug 2025",skipped:false,bio:"Commercial insurance specialist focused on protecting business clients.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Julian McMahon","Spencer Perkinson"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Art Shalomov","Ryan Carter","Spencer Perkinson"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["David Ademola","Nick Beach","Spencer Perkinson"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Nick Beach","Richard Barrett","Spencer Perkinson"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Denise Kirwan","Nick Beach","Spencer Perkinson"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Grant Cragun","Spencer Perkinson"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Caitlin Penny","Spencer Perkinson"]}]},
+  {id:"pugsley",name:"Steve Pugsley",role:"",title:"Founder",company:"Pugsley and Sons",prof:"Financial Service",focus:["Gold & Silver","Wealth Protection"],ms:"May 2026",skipped:false,bio:"28+ years helping clients grow and protect wealth through physical Gold and Silver.",t:[]},
+  {id:"rolfe",name:"Laura Rolfe",role:"",title:"CEO / Franchise Consultant",company:"Mint Franchise Consultants",prof:"Consultant & Service",focus:["Business Broker","Franchising & Licensing"],ms:"Feb 2025",skipped:false,bio:"Certified Advanced Franchise Consultant. Empowers aspiring entrepreneurs through business ownership.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Carla Magee","Laura Rolfe"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Bill Stevens","Joe Scarpignato","Kara Showley","Laura Rolfe"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Joe Scarpignato","Laura Rolfe"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Bill Stevens","Laura Rolfe","Ryan Carter"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Chuck Ertl","Grant Cragun","Laura Rolfe","Shawn Charles"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Laura Rolfe","Shawn Charles"]},{d:"Jul 2025",g:"East Valley Phoenix",m:["Grant Cragun","Julian McMahon","Laura Rolfe"]},{d:"Jun 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Joe Scarpignato","Laura Rolfe"]}]},
+  {id:"scarpignato",name:"Joe Scarpignato",role:"",title:"CEO / Owner Broker",company:"Phoenician Properties Realty",prof:"Real Estate",focus:["Residential Real Estate","1031 Exchange","Probate"],ms:"Dec 2024",skipped:false,bio:"RCS-D.E., STS, SRES, SFR. Investing, 1031 Exchange, Probate, Elder and Family Real Estate.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Grant Cragun","Joe Scarpignato","Shawn Gill, CPA"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Bill Stevens","Joe Scarpignato","Kara Showley","Laura Rolfe"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Joe Scarpignato","Laura Rolfe"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Joe Scarpignato","Shawn Charles"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Adam Ashby","Joe Scarpignato","Michael Migdol"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Joe Scarpignato","Julian McMahon","Rachel Durkot"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Joe Scarpignato","Joel Del Rosario","Nick Beach"]}]},
+  {id:"shalomov",name:"Art Shalomov",role:"",title:"Mortgage Lender / CDLP",company:"CrossCountry Mortgage",prof:"Banking & Finance",focus:["Mortgage/RE Financing","Divorce Lending"],ms:"Nov 2024",skipped:false,bio:"Mortgage lender specializing in self-employed entrepreneurs and divorce scenarios. CDLP certified.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Don Hulke","Sumeet Pall"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Aaron Fransua","Art Shalomov","Ryan Carter","Spencer Perkinson"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Ardene Fox","Art Shalomov","Julian McMahon"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Art Shalomov","Kara Showley","Mr. Erik Schlesinger"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Art Shalomov","Joe Cusack","Stan Nelson"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Art Shalomov","Shawn Charles","Suzon Dye"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Adam Ashby","Art Shalomov","Caitlin Penny"]},{d:"Sep 2025",g:"East Valley Phoenix",m:["Art Shalomov","Nadia Brown","Shawn Gill, CPA"]},{d:"Jun 2025",g:"East Valley Phoenix",m:["Adam Ashby","Art Shalomov","Gary Johnson"]}]},
+  {id:"showley",name:"Kara Showley",role:"",title:"Manager / Market Lead",company:"McGuire Sponsel",prof:"Consultant & Service",focus:["Taxation","Tax Incentives & Credits"],ms:"Dec 2025",skipped:false,bio:"Helps businesses and CPAs identify and maximize complex tax incentives and credits.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["David Hawks","Kara Showley","Nate Hill"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Bill Stevens","Joe Scarpignato","Kara Showley","Laura Rolfe"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Bill Stevens","Chuck Ertl","Kara Showley"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Art Shalomov","Kara Showley","Mr. Erik Schlesinger"]}]},
+  {id:"stevens",name:"Bill Stevens",role:"",title:"Executive Vice President",company:"WestPac Wealth Partners",prof:"Financial Service",focus:["Estate Planning","Wealth Management","Retirement"],ms:"Dec 2024",skipped:false,bio:"CLU, ChFC, MSFS. Helping people make Smart Financial Decisions.",
+  t:[{d:"Apr 2026",g:"East Valley Phoenix",m:["Bill Stevens","Caitlin Penny","Joe Cusack"]},{d:"Mar 2026",g:"East Valley Phoenix",m:["Bill Stevens","Joe Scarpignato","Kara Showley","Laura Rolfe"]},{d:"Feb 2026",g:"East Valley Phoenix",m:["Bill Stevens","Chuck Ertl","Kara Showley"]},{d:"Jan 2026",g:"East Valley Phoenix",m:["Bill Stevens","Laura Rolfe","Ryan Carter"]},{d:"Dec 2025",g:"East Valley Phoenix",m:["Aaron Fransua","Bill Stevens","Chris Badulescu","Shawn Gill, CPA"]},{d:"Nov 2025",g:"East Valley Phoenix",m:["Bill Stevens","David Ademola","Scott Beilke","Shawn Gill, CPA"]},{d:"Oct 2025",g:"East Valley Phoenix",m:["Benjamin D. Greenberg","Bill Stevens","Brint Hiatt"]},{d:"Aug 2025",g:"East Valley Phoenix",m:["Bill Stevens","Michael Clemente","Shawn Charles"]}]},
+  {id:"wells",name:"Matt Wells",role:"",title:"Principal / Tax Strategist",company:"The Walters Way",prof:"Accountant",focus:["Business Mgmt","Family Business","Healthcare","Taxation"],ms:"May 2026",skipped:false,bio:"CPA. Business management consulting, family business, healthcare, real estate, and tax strategy.",
+  t:[{d:"Jun 2026",g:"Scottsdale",m:["Matt Wells","Sam Bachstein","Susan Perry"]}]},
+  {id:"wilson",name:"Andre Wilson",role:"",title:"Managing Partner",company:"Get Altima",prof:"Investment Advisor",focus:["Investment/Portfolio Management"],ms:"—",skipped:false,bio:"Investment advisor focused on portfolio management.",t:[]}
+];
+
+// Patch groups field onto each member from original ProVisors data
+const MEMBER_GROUPS={
+  ademola:"Scottsdale, Black Professionals Affinity Group, East Valley Phoenix",
+  beach:"East Valley Phoenix",
+  carter:"East Valley Phoenix",
+  charles:"East Valley Phoenix, Black Professionals Affinity Group",
+  cragun:"East Valley Phoenix",
+  cusack:"Phoenix 3",
+  ertl:"East Valley Phoenix",
+  fox:"East Valley Phoenix",
+  gill:"East Valley Phoenix",
+  greenberg:"East Valley Phoenix",
+  hawkes:"East Valley Phoenix",
+  hawks:"East Valley Phoenix",
+  hill:"East Valley Phoenix",
+  hoffman:"Phoenix 4",
+  howard:"—",
+  hulke:"East Valley Phoenix",
+  johnson:"Consultants & Coaches Affinity Group, Costa Mesa, Irvine Central",
+  jones:"East Valley Phoenix",
+  mcmahon:"East Valley Phoenix",
+  meidinger:"East Valley Phoenix",
+  migdol:"East Valley Phoenix",
+  pall:"East Valley Phoenix",
+  penny:"East Valley Phoenix",
+  perkinson:"East Valley Phoenix",
+  pugsley:"East Valley Phoenix",
+  rolfe:"East Valley Phoenix",
+  scarpignato:"East Valley Phoenix",
+  shalomov:"East Valley Phoenix",
+  showley:"East Valley Phoenix",
+  stevens:"East Valley Phoenix",
+  wells:"Scottsdale",
+  wilson:"East Valley Phoenix"
+};
+MEMBERS.forEach(m=>{ if(!m.groups) m.groups=MEMBER_GROUPS[m.id]||'East Valley Phoenix'; });
+
+// Helper: primary home group for a member
+function primaryGroup(m){ return (m.groups||'').split(',')[0].trim()||'—'; }
+function getPairKey(a,b){return [a,b].sort().join('|');}
+function buildPairHistory(){
+  // Uses getAllRosterMembers() so roster additions are included.
+  // Called lazily after init so rosterAdditions is populated.
+  const all=typeof getAllRosterMembers==='function'?getAllRosterMembers():MEMBERS;
+  const uniqueSessions=new Map();
+  all.forEach(m=>{
+    m.t.forEach(t=>{
+      const clean=t.m.map(n=>n.replace(/ \[.*\]/,'').replace(/, CPA$/,'').trim());
+      const sig=[...clean].sort().join('||');
+      if(!uniqueSessions.has(sig)) uniqueSessions.set(sig,clean);
+    });
+  });
+  const counts={};
+  uniqueSessions.forEach(members=>{
+    for(let i=0;i<members.length;i++){
+      for(let j=i+1;j<members.length;j++){
+        const k=getPairKey(members[i],members[j]);
+        counts[k]=(counts[k]||0)+1;
+      }
+    }
+  });
+  return counts;
+}
+// PAIR_HISTORY is rebuilt after init() so rosterAdditions are included.
+// timesTogether() calls rebuildPairHistory() lazily if needed.
+let _pairHistory=null;
+function rebuildPairHistory(){ _pairHistory=buildPairHistory(); }
+function timesTogether(nameA,nameB){
+  if(!_pairHistory) _pairHistory=buildPairHistory();
+  return _pairHistory[getPairKey(nameA,nameB)]||0;
+}
+
+// Prof category
+function profCat(p){return PC[p]||'other';}
+function profClass(p){return 'prof-'+profCat(p);}
+
+function ini(n){return n.split(' ').filter(w=>!['GL','EC','CPA','TM','Host'].includes(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+
+function uniquePartners(m){
+  const s=new Set();
+  m.t.forEach(t=>t.m.forEach(p=>{const k=p.replace(/ \[.*\]/,'').replace(/, CPA$/,'').trim();if(k!==m.name)s.add(k);}));
+  return s.size;
+}
+function freqPartners(m){
+  const c={};
+  m.t.forEach(t=>t.m.forEach(p=>{const k=p.replace(/ \[.*\]/,'').replace(/, CPA$/,'').trim();if(k!==m.name)c[k]=(c[k]||0)+1;}));
+  return Object.entries(c).sort((a,b)=>b[1]-a[1]);
+}
+function isNew(m){const y=parseInt((m.ms||'').split(' ')[1]);return y>=2026;}
+
+// ============================================================
+// STATE
+// ============================================================
+let attendance={};   // id -> true/false
+let constraints=[];  // [{type:'lock'|'skip',members:[id,...],label}]
+let walkins=[];      // [{id,name,title,company,prof,focus:[]}]
+let colIdCounter=1;
+let walkinCounter=1;
+
+// Attendance is initialized in init() after rosterAdditions loads
+
+// Pre-load known constraints
+constraints=[
+  {type:'skip',members:['johnson'],label:'Gary Johnson opted out'},
+  {type:'lock',members:['meidinger','migdol','carter'],label:'Darryl Meidinger requested Michael Migdol + Ryan Carter'}
+];
+
+// ============================================================
+// PAGE NAVIGATION
+// ============================================================
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const tabs={profiles:0,attendance:1,board:2,history:3};
+  document.querySelectorAll('.nav-tab')[tabs[name]].classList.add('active');
+  if(name==='board'){
+    updateBoardBadge();
+    refreshOptedOutBanner();
+    // Set today's date if not already set
+    if(!document.getElementById('board-date').value){
+      const today=new Date();
+      const yyyy=today.getFullYear();
+      const mm=String(today.getMonth()+1).padStart(2,'0');
+      const dd=String(today.getDate()).padStart(2,'0');
+      document.getElementById('board-date').value=`${yyyy}-${mm}-${dd}`;
+    }
+    checkSavedDate();
+  }
+  if(name==='history'){
+    renderHistory();
+  }
+}
+
+// ============================================================
+// GROUP FILTER (shared between profiles and attendance)
+// ============================================================
+let selectedGroups={p1:new Set(), a:new Set()}; // 'all' = no filter (empty set)
+
+function getAllGroups(){
+  const gs=new Set();
+  getAllRosterMembers().forEach(m=>{
+    (m.groups||'').split(',').forEach(g=>{
+      const t=g.trim().replace(/\s*\([^)]*\)/g,'').trim();
+      if(t&&t!=='—') gs.add(t);
+    });
+  });
+  return [...gs].sort();
+}
+
+function memberMatchesGroups(m, sel){
+  if(sel.size===0) return true;
+  const mg=(m.groups||'').split(',').map(g=>g.trim().replace(/\s*\([^)]*\)/g,'').trim());
+  return mg.some(g=>sel.has(g));
+}
+
+function buildGroupDropdown(ddId, pageKey){
+  const dd=document.getElementById(ddId);
+  const groups=getAllGroups();
+  const sel=selectedGroups[pageKey];
+  dd.innerHTML=`
+    <div class="gd-item" onclick="toggleAllGroups('${pageKey}','${ddId}')">
+      <input type="checkbox" id="gd-all-${pageKey}" ${sel.size===0?'checked':''}>
+      <label for="gd-all-${pageKey}" style="cursor:pointer;font-weight:600">All groups</label>
+    </div>
+    <div class="gd-divider"></div>
+    ${groups.map(g=>`
+      <div class="gd-item" onclick="toggleOneGroup('${pageKey}','${ddId}',${JSON.stringify(g)})">
+        <input type="checkbox" ${sel.has(g)?'checked':''} data-group="${g.replace(/"/g,'&quot;')}">
+        <label style="cursor:pointer">${g}</label>
+      </div>`).join('')}`;
+}
+
+function toggleGroupDropdown(ddId){
+  const dd=document.getElementById(ddId);
+  const isOpen=dd.classList.contains('open');
+  // Close all dropdowns first
+  document.querySelectorAll('.group-dropdown').forEach(d=>d.classList.remove('open'));
+  if(!isOpen){
+    const pageKey=ddId==='p1-groups-dd'?'p1':'a';
+    buildGroupDropdown(ddId,pageKey);
+    dd.classList.add('open');
+  }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.group-filter-wrap')) document.querySelectorAll('.group-dropdown').forEach(d=>d.classList.remove('open'));
+});
+
+function toggleAllGroups(pageKey, ddId){
+  selectedGroups[pageKey]=new Set(); // empty = all
+  updateGroupBtn(pageKey);
+  buildGroupDropdown(ddId,pageKey);
+  if(pageKey==='p1') renderProfiles();
+  else renderAttendance();
+}
+
+function toggleOneGroup(pageKey, ddId, group){
+  const sel=selectedGroups[pageKey];
+  if(sel.has(group)) sel.delete(group); else sel.add(group);
+  updateGroupBtn(pageKey);
+  buildGroupDropdown(ddId,pageKey);
+  if(pageKey==='p1') renderProfiles();
+  else renderAttendance();
+}
+
+function updateGroupBtn(pageKey){
+  const sel=selectedGroups[pageKey];
+  const btn=document.getElementById(pageKey+'-group-btn');
+  const cnt=document.getElementById(pageKey+'-group-count');
+  if(sel.size>0){
+    btn.classList.add('active');
+    cnt.style.display='';
+    cnt.textContent=sel.size;
+  } else {
+    btn.classList.remove('active');
+    cnt.style.display='none';
+  }
+}
+
+function sortAlpha(arr){ return [...arr].sort((a,b)=>a.name.localeCompare(b.name)); }
+
+// ============================================================
+// PAGE 1: PROFILES
+// ============================================================
+function renderProfiles(){
+  const q=(document.getElementById('p1-search').value||'').toLowerCase();
+  const fp=document.getElementById('p1-prof').value;
+  const ff=document.getElementById('p1-filter').value;
+  const gsel=selectedGroups.p1;
+  const grid=document.getElementById('profile-grid');
+  const all=sortAlpha(getAllRosterMembers());
+  document.getElementById('s1-total').textContent=all.length;
+  const filtered=all.filter(m=>{
+    const mq=!q||m.name.toLowerCase().includes(q)||(m.company||'').toLowerCase().includes(q)||(m.focus||[]).join(' ').toLowerCase().includes(q)||m.prof.toLowerCase().includes(q);
+    const mp=!fp||m.prof===fp;
+    const mf=!ff||(ff==='has'&&m.t.length>0)||(ff==='none'&&m.t.length===0)||(ff==='new'&&isNew(m));
+    const mg=memberMatchesGroups(m,gsel);
+    return mq&&mp&&mf&&mg;
+  });
+  grid.innerHTML=filtered.map(m=>{
+    const pc=profClass(m.prof);
+    const isRosterAdd=rosterAdditions.some(r=>r.id===m.id);
+    const grp=primaryGroup(m);
+    return `<div class="pcard${m.skipped?' pcard-skip':''}" onclick="openProfile('${m.id}')">
+      <div class="pcard-top">
+        <div class="avatar ${pc}">${ini(m.name)}</div>
+        <div>
+          <div class="pcard-name">${m.name}${m.role?` <span style="font-size:10px;color:var(--text2)">(${m.role})</span>`:''}${m.skipped?`<span class="badge-sm badge-skip">out</span>`:isRosterAdd?`<span class="badge-sm badge-lock">added</span>`:isNew(m)?`<span class="badge-sm badge-new">new</span>`:''}</div>
+          <div class="pcard-title">${m.title||m.prof}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:1px">${grp}</div>
+        </div>
+      </div>
+      <span class="pill ${pc}">${m.prof}</span>
+      <div class="pcard-focus">${(m.focus||[]).slice(0,2).map(f=>`<span class="focus-tag">${f}</span>`).join('')}</div>
+      <div class="pcard-stats">
+        <div class="pstat"><div class="pstat-n">${m.t.length}</div><div class="pstat-l">troikas</div></div>
+        <div class="pstat"><div class="pstat-n">${uniquePartners(m)}</div><div class="pstat-l">partners</div></div>
+        <div class="pstat"><div class="pstat-n" style="font-size:11px">${(m.ms||'').split(' ')[1]||m.ms||'—'}</div><div class="pstat-l">since</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openProfile(id){
+  const m=findMember(id);
+  if(!m) return;
+  const pc=profClass(m.prof);
+  const freq=freqPartners(m);
+  const mf=freq.length>0?freq[0][1]:1;
+  const isRosterAdd=rosterAdditions.some(r=>r.id===m.id);
+  let html=`<button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-avatar ${pc}">${ini(m.name)}</div>
+      <div>
+        <div class="modal-name">${m.name}${m.role?` <span style="font-size:14px;color:var(--text2)">(${m.role})</span>`:''}</div>
+        <div class="modal-sub">${m.title||m.prof} · ${m.company||'—'}</div>
+        <span class="pill ${pc}" style="margin-top:5px;display:inline-block">${m.prof}</span>
+        ${m.skipped?`<span class="badge-sm badge-skip">opted out</span>`:''}
+        ${isRosterAdd?`<span class="badge-sm badge-lock">added to roster</span>`:''}
+        ${!isRosterAdd&&isNew(m)?`<span class="badge-sm badge-new">new 2026</span>`:''}
+        ${m.groups?`<div style="font-size:11px;color:var(--text2);margin-top:4px">📍 ${m.groups}</div>`:''}
+      </div>
+    </div>`;
+  if(m.bio)html+=`<div class="modal-bio">${m.bio}</div>`;
+  html+=`<div class="modal-section">Focus areas</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${(m.focus||[]).map(f=>`<span class="focus-tag">${f}</span>`).join('')}</div>
+    <div class="modal-grid2" style="margin-bottom:12px">
+      <div class="modal-stat"><div class="modal-stat-lbl">Total troikas</div><div class="modal-stat-val">${m.t.length}</div></div>
+      <div class="modal-stat"><div class="modal-stat-lbl">Unique partners</div><div class="modal-stat-val">${uniquePartners(m)}</div></div>
+      <div class="modal-stat"><div class="modal-stat-lbl">Member since</div><div class="modal-stat-val">${m.ms||'—'}</div></div>
+      <div class="modal-stat"><div class="modal-stat-lbl">Cross-group</div><div class="modal-stat-val">${m.t.filter(t=>!t.g||!t.g.includes('East Valley')).length}</div></div>
+    </div>`;
+  if(freq.length>0){
+    html+=`<div class="modal-section">Most frequent partners</div>
+      <div class="modal-stat" style="margin-bottom:12px">`;
+    freq.slice(0,6).forEach(([n,cnt])=>{
+      html+=`<div class="freq-row"><span>${n}</span><div style="display:flex;align-items:center;gap:8px"><div class="freq-bar" style="width:${Math.round((cnt/mf)*60)+4}px"></div><span style="font-size:11px;color:var(--text2);min-width:16px">${cnt}×</span></div></div>`;
+    });
+    html+=`</div>`;
+  }
+  if(m.t.length>0){
+    html+=`<div class="modal-section">Troika history (${m.t.length})</div>`;
+    m.t.forEach(t=>{
+      html+=`<div class="troika-entry">
+        <div class="troika-date">📅 ${t.d} · ${t.g}</div>
+        <div class="troika-members">${t.m.map(p=>{const k=p.replace(/ \[.*\]/,'').replace(/, CPA$/,'').trim();return`<span class="troika-chip${k===m.name?' self':''}">${k}</span>`;}).join('')}</div>
+      </div>`;
+    });
+  } else {
+    html+=`<div class="modal-section">Troika history</div><div style="background:var(--surface2);border-radius:var(--r);padding:12px;font-size:13px;color:var(--text2);text-align:center">No past troikas on file — fresh pairing opportunity.</div>`;
+  }
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e){
+  if(!e||e.target.id==='modal-overlay'){
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+function initProfileFilters(){
+  const profs=[...new Set(getAllRosterMembers().map(m=>m.prof))].sort();
+  const s=document.getElementById('p1-prof');
+  // Clear existing options except first
+  while(s.options.length>1) s.remove(1);
+  profs.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;s.appendChild(o);});
+}
+
+function initProfileStats(){
+  const all=getAllRosterMembers();
+  const wh=all.filter(m=>m.t.length>0);
+  const none=all.filter(m=>m.t.length===0);
+  const top=all.reduce((a,b)=>b.t.length>a.t.length?b:a,all[0]);
+  const avg=wh.length>0?Math.round(wh.reduce((s,m)=>s+m.t.length,0)/wh.length):0;
+  document.getElementById('s1-total').textContent=all.length;
+  document.getElementById('s1-hist').textContent=wh.length;
+  document.getElementById('s1-none').textContent=none.length;
+  document.getElementById('s1-avg').textContent=avg;
+}
+
+// ============================================================
+// PAGE 2: ATTENDANCE
+// ============================================================
+function buildAttendCard(m, isSkip, isPresent, isWalkin){
+  const pc=profClass(m.prof);
+  const card=document.createElement('div');
+  card.className='acard'+(isPresent?'':' absent')+(isSkip?' skipped':'');
+
+  const check=document.createElement('div');
+  check.className='acard-check'+(isPresent?' checked':'');
+  check.title=isSkip?'Opted out':'Toggle attendance';
+  if(!isSkip) check.addEventListener('click',()=>toggle(m.id));
+  card.appendChild(check);
+
+  const info=document.createElement('div');
+  info.className='acard-info';
+
+  const nameDiv=document.createElement('div');
+  nameDiv.className='acard-name';
+  nameDiv.textContent=m.name+(m.role?' ('+m.role+')':'');
+  info.appendChild(nameDiv);
+
+  const profDiv=document.createElement('div');
+  profDiv.className='acard-prof';
+  profDiv.textContent=m.company||'—';
+  info.appendChild(profDiv);
+
+  // Group name line
+  if(!isWalkin){
+    const grpDiv=document.createElement('div');
+    const grp=primaryGroup(m);
+    const isOur=grp.toLowerCase().includes('east valley phoenix');
+    grpDiv.className='acard-group'+(isOur?'':' other-group');
+    grpDiv.textContent=grp;
+    info.appendChild(grpDiv);
+  }
+
+  const meta=document.createElement('div');
+  meta.className='acard-meta';
+  meta.innerHTML=`<span class="pill ${pc}" style="font-size:9px;padding:1px 6px">${m.prof}</span>`
+    +(isSkip?'<span class="badge-sm badge-skip">opted out</span>':'')
+    +(isWalkin?'<span class="badge-sm" style="background:#EEF2FF;color:#1A3A8A">walk-in</span>':'')
+    +(!isWalkin&&isNew(m)?'<span class="badge-sm badge-new">new</span>':'');
+  info.appendChild(meta);
+
+  if(isWalkin){
+    const rmBtn=document.createElement('button');
+    rmBtn.style.cssText='margin-top:6px;font-size:11px;padding:2px 8px;border:1px solid var(--border-med);border-radius:4px;background:transparent;color:var(--danger);cursor:pointer';
+    rmBtn.textContent='Remove';
+    rmBtn.addEventListener('click',()=>removeWalkin(m.id));
+    info.appendChild(rmBtn);
+  }
+
+  card.appendChild(info);
+  return card;
+}
+
+// Track last filtered set for "mark filtered present"
+let _lastFilteredAttend=[];
+
+function renderAttendance(){
+  const q=(document.getElementById('a-search').value||'').toLowerCase();
+  const gsel=selectedGroups.a;
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  const allRoster=sortAlpha(getAllRosterMembers().filter(m=>!m.inactive));
+  const filtered=allRoster.filter(m=>{
+    const mq=!q||m.name.toLowerCase().includes(q)||m.prof.toLowerCase().includes(q)||(m.company||'').toLowerCase().includes(q);
+    const mg=memberMatchesGroups(m,gsel);
+    return mq&&mg;
+  });
+  _lastFilteredAttend=filtered;
+  const grid=document.getElementById('attend-grid');
+  grid.innerHTML='';
+  filtered.forEach(m=>{
+    const isSkip=skipIds.has(m.id);
+    const isPresent=attendance[m.id]&&!isSkip;
+    grid.appendChild(buildAttendCard(m,isSkip,isPresent,false));
+  });
+
+  // Walk-ins section
+  const wiGrid=document.getElementById('walkin-grid');
+  const wiHdr=document.getElementById('walkin-list-hdr');
+  const wiCount=document.getElementById('walkin-count');
+  wiGrid.innerHTML='';
+  if(walkins.length>0){
+    wiHdr.style.display='';
+    wiCount.textContent='('+walkins.length+')';
+    walkins.forEach(m=>{
+      const isPresent=attendance[m.id]!==false;
+      wiGrid.appendChild(buildAttendCard(m,false,isPresent,true));
+    });
+  } else {
+    wiHdr.style.display='none';
+  }
+
+  updateAttendStats();
+}
+
+function toggle(id){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  if(skipIds.has(id)) return;
+  attendance[id]=!attendance[id];
+  renderAttendance();
+}
+
+function markAllPresent(){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  getAllRosterMembers().filter(m=>!m.inactive).forEach(m=>{if(!skipIds.has(m.id))attendance[m.id]=true;});
+  walkins.forEach(m=>{attendance[m.id]=true;});
+  renderAttendance();
+}
+
+function markFilteredPresent(){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  _lastFilteredAttend.forEach(m=>{if(!skipIds.has(m.id))attendance[m.id]=true;});
+  renderAttendance();
+}
+
+function clearAll(){
+  getAllRosterMembers().forEach(m=>{attendance[m.id]=false;});
+  walkins.forEach(m=>{attendance[m.id]=false;});
+  renderAttendance();
+}
+
+function updateAttendStats(){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  const allRoster=getAllRosterMembers().filter(m=>!m.inactive);
+  const presentReg=allRoster.filter(m=>attendance[m.id]&&!skipIds.has(m.id)).length;
+  const presentWalkin=walkins.filter(m=>attendance[m.id]).length;
+  const absent=allRoster.filter(m=>!attendance[m.id]&&!skipIds.has(m.id)).length;
+  document.getElementById('s2-present').textContent=presentReg+presentWalkin;
+  document.getElementById('s2-absent').textContent=absent;
+  document.getElementById('s2-skip').textContent=skipIds.size;
+  document.getElementById('s2-lock').textContent=constraints.filter(c=>c.type==='lock').length;
+}
+
+// ---- WALK-IN FUNCTIONS ----
+function toggleWalkinPanel(){
+  const panel=document.getElementById('walkin-panel');
+  const btn=document.getElementById('walkin-toggle-btn');
+  const isOpen=panel.style.display!=='none';
+  panel.style.display=isOpen?'none':'block';
+  btn.textContent=isOpen?'+ Walk-in':'✕ Cancel';
+  if(!isOpen){
+    document.getElementById('wi-name').focus();
+    document.getElementById('wi-error').style.display='none';
+  }
+}
+
+function addWalkin(){
+  const name=document.getElementById('wi-name').value.trim();
+  const prof=document.getElementById('wi-prof').value;
+  const errEl=document.getElementById('wi-error');
+  if(!name||!prof){errEl.style.display='';return;}
+  errEl.style.display='none';
+
+  const title=document.getElementById('wi-title').value.trim()||prof;
+  const company=document.getElementById('wi-company').value.trim()||'Walk-in guest';
+  const focusRaw=document.getElementById('wi-focus').value.trim();
+  const focus=focusRaw?focusRaw.split(',').map(s=>s.trim()).filter(Boolean):['—'];
+  const id='walkin_'+walkinCounter++;
+
+  const m={id,name,role:'',title,company,prof,focus,ms:'—',skipped:false,bio:'Walk-in guest added at the meeting.',t:[]};
+  walkins.push(m);
+  attendance[id]=true;  // auto mark present
+
+  // Also add to constraint selects so they can be locked if needed
+  rebuildConstraintSelects();
+
+  // Clear form
+  document.getElementById('wi-name').value='';
+  document.getElementById('wi-title').value='';
+  document.getElementById('wi-company').value='';
+  document.getElementById('wi-prof').value='';
+  document.getElementById('wi-focus').value='';
+  toggleWalkinPanel();
+  renderAttendance();
+  showToast(name+' added and marked present');
+}
+
+function removeWalkin(id){
+  walkins=walkins.filter(m=>m.id!==id);
+  delete attendance[id];
+  rebuildConstraintSelects();
+  renderAttendance();
+}
+
+function renderConstraints(){
+  const list=document.getElementById('constraint-list');
+  if(constraints.length===0){
+    list.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No constraints set.</div>';
+    return;
+  }
+  list.innerHTML=constraints.map((c,i)=>{
+    const chips=c.members.map(id=>{
+      const m=MEMBERS.find(x=>x.id===id);
+      return m?`<span class="troika-chip">${m.name}</span>`:'';
+    }).join('');
+    return `<div class="constraint-item ${c.type==='lock'?'lock':'skip-c'}">
+      <div style="flex:1">
+        <div class="constraint-title">${c.type==='lock'?'🔒 Locked together':'⊘ Opted out'}</div>
+        <div class="constraint-sub">${c.label}</div>
+        <div class="constraint-chips">${chips}</div>
+      </div>
+      <button class="rm-btn" onclick="removeConstraint(${i})" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function removeConstraint(i){
+  const c=constraints[i];
+  if(c.type==='skip') c.members.forEach(id=>{if(id==='johnson'){}else{/* allow re-enable */}});
+  constraints.splice(i,1);
+  renderConstraints();
+  renderAttendance();
+}
+
+function updateConstraintUI(){
+  const type=document.getElementById('c-type').value;
+  document.getElementById('c-extra-selects').style.display=type==='skip'?'none':'flex';
+  document.getElementById('c-extra-selects').style.flexDirection='column';
+  document.getElementById('c-extra-selects').style.gap='6px';
+}
+
+function rebuildConstraintSelects(){
+  const all=sortAlpha([...getAllRosterMembers(),...walkins]);
+  ['c-p1','c-p2','c-p3'].forEach((sid,i)=>{
+    const sel=document.getElementById(sid);
+    const cur=sel.value;
+    sel.innerHTML=i===0?'<option value="">Select person…</option>':i===1?'<option value="">Select partner…</option>':'<option value="">3rd person (optional)…</option>';
+    all.forEach(m=>{
+      const o=document.createElement('option');
+      o.value=m.id;
+      const isWalkin=walkins.find(w=>w.id===m.id);
+      const isAdded=rosterAdditions.find(r=>r.id===m.id);
+      o.textContent=m.name+(m.role?' ('+m.role+')':'')+(isWalkin?' [walk-in]':isAdded?' [added]':'');
+      sel.appendChild(o);
+    });
+    if(cur) sel.value=cur;
+  });
+}
+
+function addConstraint(){
+  const type=document.getElementById('c-type').value;
+  const p1=document.getElementById('c-p1').value;
+  if(!p1) return;
+  const m1=findMember(p1);
+  if(!m1) return;
+  if(type==='skip'){
+    if(constraints.some(c=>c.type==='skip'&&c.members.includes(p1))) return;
+    constraints.push({type:'skip',members:[p1],label:`${m1.name} opted out`});
+    attendance[p1]=false;
+  } else {
+    const p2=document.getElementById('c-p2').value;
+    if(!p2) return;
+    const p3v=document.getElementById('c-p3').value;
+    const members=[p1,p2,...(p3v?[p3v]:[])];
+    const names=members.map(id=>(findMember(id)||{name:id}).name).join(' + ');
+    constraints.push({type:'lock',members,label:`${names} locked together`});
+  }
+  renderConstraints();
+  renderAttendance();
+  document.getElementById('c-p1').value='';
+  document.getElementById('c-p2').value='';
+  document.getElementById('c-p3').value='';
+}
+
+// ============================================================
+// PAGE 3: KANBAN BOARD
+// ============================================================
+let groups=[];   // [{id, title, members:[id,...], locked:bool}]
+let holding=[];  // [id,...]
+let dragState=null;
+
+function profScore(profA,profB){
+  const catA=profCat(profA),catB=profCat(profB);
+  if(catA===catB) return -2;
+  const pairs=[['legal','accounting'],['legal','finance'],['legal','realestate'],['accounting','finance'],['finance','realestate'],['tech','consulting'],['hr','tech'],['marketing','consulting']];
+  if(pairs.some(([a,b])=>(catA===a&&catB===b)||(catA===b&&catB===a))) return 2;
+  return 0;
+}
+
+function scoreGroup(ids){
+  let score=0;
+  const members=ids.map(id=>findMember(id)).filter(Boolean);
+  for(let i=0;i<members.length;i++){
+    for(let j=i+1;j<members.length;j++){
+      score+=profScore(members[i].prof,members[j].prof);
+      const t=timesTogether(members[i].name,members[j].name);
+      if(t>=3) score-=4;
+      else if(t>=2) score-=2;
+      else if(t>=1) score-=1;
+    }
+  }
+  return score;
+}
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function getBoardDate(){
+  return document.getElementById('board-date').value;
+}
+
+function isDateAlreadySaved(dateVal){
+  if(!dateVal) return false;
+  return loadHistory().some(s=>s.date===dateVal);
+}
+
+function checkSavedDate(){
+  const dateVal=getBoardDate();
+  const warn=document.getElementById('date-saved-warn');
+  if(dateVal && isDateAlreadySaved(dateVal)){
+    warn.style.display='flex';
+  } else {
+    warn.style.display='none';
+  }
+}
+
+function handleGenerateClick(){
+  const dateVal=getBoardDate();
+  // Only ask for confirmation if this date is already saved — otherwise generate freely
+  if(groups.length>0 && dateVal && isDateAlreadySaved(dateVal)){
+    const bar=document.getElementById('regen-confirm');
+    bar.style.display='flex';
+    bar.scrollIntoView({behavior:'smooth',block:'nearest'});
+  } else {
+    generateBoard();
+  }
+}
+
+function confirmRegenerate(){
+  document.getElementById('regen-confirm').style.display='none';
+  generateBoard();
+}
+
+function cancelRegenerate(){
+  document.getElementById('regen-confirm').style.display='none';
+}
+
+function saveAssignment(){
+  if(groups.length===0){showToast('Nothing to save — generate troikas first');return;}
+  const dateVal=getBoardDate();
+  if(!dateVal){showToast('Please set a meeting date in the toolbar first');return;}
+
+  const history=loadHistory();
+  const existingIdx=history.findIndex(s=>s.date===dateVal);
+  const isUpdate=existingIdx>=0;
+
+  const snapshot=groups.map(g=>({
+    title:g.title,
+    locked:g.locked,
+    members:g.members.map(id=>{
+      const m=findMember(id);
+      return m?{name:m.name,prof:m.prof,focus:m.focus[0]||'',role:m.role,walkin:!!walkins.find(w=>w.id===id)}:{name:id,prof:'',focus:'',role:'',walkin:false};
+    })
+  }));
+  const unassigned=holding.map(id=>{ const m=findMember(id); return m?m.name:id; });
+
+  const session={
+    id: isUpdate ? history[existingIdx].id : 'sess_'+Date.now(),
+    date:dateVal,
+    label:formatDate(dateVal)+' · East Valley Phoenix',
+    savedAt:new Date().toISOString(),
+    troikas:snapshot,
+    unassigned,
+    totalPresent:snapshot.reduce((s,g)=>s+g.members.length,0)+unassigned.length
+  };
+
+  if(isUpdate){ history[existingIdx]=session; }
+  else { history.unshift(session); }
+  saveHistory(history);
+
+  // Update save button to show saved state
+  const btn=document.getElementById('save-btn');
+  btn.textContent='✓ Saved';
+  btn.style.background='var(--accent)';
+  btn.style.color='#fff';
+  setTimeout(()=>{
+    btn.textContent='✓ Save assignment';
+    btn.style.background='var(--accent-light)';
+    btn.style.color='var(--accent)';
+  },2000);
+
+  checkSavedDate();
+  updateHistBadge();
+  showToast((isUpdate?'Updated':'Saved')+' assignment for '+formatDate(dateVal)+' ✓');
+}
+
+function generateBoard(){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  const allMembers=[...getAllRosterMembers(),...walkins];
+  const pool=allMembers.filter(m=>attendance[m.id]&&!skipIds.has(m.id));
+  if(pool.length<2){showToast('Mark at least 2 members as present first');return;}
+
+  const lockConstraints=constraints.filter(c=>c.type==='lock');
+  const lockedIds=new Set();
+  const newGroups=[];
+  colIdCounter=1;
+
+  lockConstraints.forEach(c=>{
+    const present=c.members.filter(id=>attendance[id]&&!skipIds.has(id));
+    if(present.length>=2){
+      newGroups.push({id:colIdCounter++,title:'Troika '+(newGroups.length+1),members:[...present],locked:true});
+      present.forEach(id=>lockedIds.add(id));
+    }
+  });
+
+  const algo=document.getElementById('algo').value;
+  // Shuffle the free pool
+  let free=shuffle(pool.filter(m=>!lockedIds.has(m.id)));
+  if(algo==='new-first') free=shuffle([...free].sort((a,b)=>(isNew(b)?1:0)-(isNew(a)?1:0)));
+
+  // -------------------------------------------------------
+  // Core grouping: provably produces exactly floor(n/3) groups.
+  // No early-exit guards — loop only runs while free.length>=3.
+  // Strategy: for each group, take the first person, then find
+  // the best-scoring pair from the rest using scoreGroup().
+  // Indices are always valid because we enter with free.length>=3,
+  // shift one off (leaving >=2), then pick from indices 0..(len-1).
+  // -------------------------------------------------------
+  while(free.length>=3){
+    const a=free.shift(); // free now has >=2 members
+    let bestScore=-Infinity, bi=0, ci=1;
+    // Find the highest-scoring pair to join 'a'
+    for(let i=0;i<free.length-1;i++){
+      for(let j=i+1;j<free.length;j++){
+        const s=scoreGroup([a.id,free[i].id,free[j].id]);
+        if(s>bestScore){ bestScore=s; bi=i; ci=j; }
+      }
+    }
+    // bi and ci are always valid (both < free.length, which is >= 2)
+    const b=free[bi], c=free[ci];
+    // Remove higher index first so lower index stays valid
+    if(ci>bi){ free.splice(ci,1); free.splice(bi,1); }
+    else       { free.splice(bi,1); free.splice(ci,1); }
+    newGroups.push({id:colIdCounter++,title:'Troika '+(newGroups.length+1),members:[a.id,b.id,c.id],locked:false});
+  }
+  // Any remainder (0, 1, or 2 people) goes to holding
+
+  groups=newGroups;
+  holding=free.map(m=>m.id);
+  renderBoard();
+  updateBoardBadge();
+  showToast('Generated '+groups.length+' troikas · '+holding.length+' in holding');
+}
+
+function getGroupQuality(ids){
+  if(ids.length<2) return {label:'Incomplete',cls:'q-overlap'};
+  const members=ids.map(id=>findMember(id)).filter(Boolean);
+  const cats=[...new Set(members.map(m=>profCat(m.prof)))];
+  let repeatPairs=0;
+  for(let i=0;i<members.length;i++){
+    for(let j=i+1;j<members.length;j++){
+      if(timesTogether(members[i].name,members[j].name)>=2) repeatPairs++;
+    }
+  }
+  if(repeatPairs>0) return {label:`${repeatPairs} repeat pair${repeatPairs>1?'s':''}`,cls:'q-overlap'};
+  if(cats.length===members.length) return {label:'All unique professions',cls:'q-great'};
+  return {label:'Mixed professions',cls:'q-good'};
+}
+
+// Convert colId to/from string safely for data attributes
+function colKey(colId){ return colId==='holding'?'holding':String(colId); }
+function colVal(key){ return key==='holding'?'holding':parseInt(key); }
+
+function renderBoard(){
+  const board=document.getElementById('kanban-board');
+  board.innerHTML='';
+
+  // Show/hide save button
+  document.getElementById('save-btn').style.display=groups.length>0?'':'none';
+
+  // Show opted-out / absent banner
+  refreshOptedOutBanner();
+
+  // Holding column
+  const holdCol=makeColEl('holding',null);
+  board.appendChild(holdCol);
+
+  // Troika columns
+  groups.forEach(g=>{
+    board.appendChild(makeColEl(null,g));
+  });
+
+  // Attach drag/drop to all columns
+  board.querySelectorAll('.col-body').forEach(body=>{
+    body.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      body.classList.add('drag-over');
+    });
+    body.addEventListener('dragleave',()=>body.classList.remove('drag-over'));
+    body.addEventListener('drop',e=>{
+      e.preventDefault();
+      body.classList.remove('drag-over');
+      if(!dragState) return;
+      const toKey=body.dataset.col;
+      const toCol=colVal(toKey);
+      const {id,fromCol}=dragState;
+      if(colKey(fromCol)===toKey) return;
+      moveCard(id,fromCol,toCol);
+    });
+  });
+
+  // Update stats
+  const assigned=groups.reduce((s,g)=>s+g.members.length,0);
+  const statsEl=document.getElementById('board-stats');
+  if(statsEl) statsEl.textContent=groups.length+' groups · '+assigned+' assigned · '+holding.length+' in holding';
+  document.getElementById('board-sub').textContent=groups.length+' troika'+(groups.length!==1?'s':'')+' · drag cards between columns · click title to rename';
+  updateBoardBadge();
+}
+
+function makeColEl(holdingFlag, g){
+  const isHolding=holdingFlag==='holding';
+  const colId=isHolding?'holding':g.id;
+  const colKey_=colKey(colId);
+
+  const col=document.createElement('div');
+  col.className='kanban-col'+(isHolding?' holding':g.locked?' locked-col':'');
+  col.id='col-'+colKey_;
+
+  // Header
+  const hdr=document.createElement('div');
+  hdr.className='col-header';
+
+  if(isHolding){
+    hdr.innerHTML=`<span class="col-title" style="color:var(--warn)">⏸ Holding</span><span class="col-count">${holding.length}</span>`;
+  } else {
+    const q=getGroupQuality(g.members);
+    const titleSpan=document.createElement('span');
+    titleSpan.className='col-title';
+
+    const lockIcon=g.locked?'🔒 ':'';
+    const editable=document.createElement('span');
+    editable.contentEditable='true';
+    editable.style.outline='none';
+    editable.textContent=g.title;
+    editable.addEventListener('blur',()=>{ if(editable.textContent.trim()) g.title=editable.textContent.trim(); });
+    editable.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();editable.blur();} });
+    if(lockIcon) titleSpan.appendChild(document.createTextNode(lockIcon));
+    titleSpan.appendChild(editable);
+
+    const countSpan=document.createElement('span');
+    countSpan.className='col-count';
+    countSpan.textContent=g.members.length;
+
+    const qualSpan=document.createElement('span');
+    qualSpan.className='col-quality '+q.cls;
+    qualSpan.textContent=q.label;
+
+    const delBtn=document.createElement('button');
+    delBtn.className='col-del-btn';
+    delBtn.title='Delete group';
+    delBtn.textContent='✕';
+    delBtn.addEventListener('click',()=>deleteGroup(g.id));
+
+    hdr.appendChild(titleSpan);
+    hdr.appendChild(countSpan);
+    hdr.appendChild(qualSpan);
+    hdr.appendChild(delBtn);
+  }
+  col.appendChild(hdr);
+
+  // Body
+  const body=document.createElement('div');
+  body.className='col-body';
+  body.id='body-'+colKey_;
+  body.dataset.col=colKey_;
+
+  const ids=isHolding?holding:g.members;
+  ids.forEach(id=>{
+    const m=findMember(id);
+    if(m) body.appendChild(makeKCard(m,colId));
+  });
+  col.appendChild(body);
+
+  // Footer button
+  if(!isHolding){
+    const addBtn=document.createElement('button');
+    addBtn.className='col-add-btn';
+    addBtn.textContent='+ Add from holding';
+    addBtn.addEventListener('click',()=>addHoldingToGroup(g.id));
+    col.appendChild(addBtn);
+  }
+
+  return col;
+}
+
+function findMember(id){return MEMBERS.find(x=>x.id===id)||walkins.find(x=>x.id===id);}
+
+function makeKCard(m,colId){
+  const pc=profClass(m.prof);
+  const card=document.createElement('div');
+  card.className='kcard';
+  card.id='kcard-'+m.id;
+  card.draggable=true;
+
+  // Detect repeat pairs
+  let warnPairs='';
+  if(colId!=='holding'){
+    const g=groups.find(x=>x.id===colId);
+    if(g){
+      g.members.forEach(id2=>{
+        if(id2!==m.id){
+          const m2=findMember(id2);
+          if(m2){
+            const t=timesTogether(m.name,m2.name);
+            if(t>=2) warnPairs+=m2.name.split(' ')[0]+' ('+t+'×) ';
+          }
+        }
+      });
+    }
+  }
+
+  const isWalkin=!!walkins.find(w=>w.id===m.id);
+  const newBadge=isWalkin?'<span class="badge-sm" style="background:#EEF2FF;color:#1A3A8A;font-size:9px">walk-in</span>':isNew(m)?'<span class="badge-sm badge-new" style="font-size:9px">new</span>':'';
+  const rolePart=m.role?`<span style="font-size:9px;color:var(--text2)">(${m.role})</span>`:'';
+  const warnHtml=warnPairs?`<div class="kcard-warn">⚠ Already met: ${warnPairs.trim()}</div>`:'';
+  const troikaCount=m.t.length>0?`<span style="font-size:9px;color:var(--text3)">${m.t.length} troikas</span>`:'';
+
+  card.innerHTML=`
+    <div class="kcard-name">${m.name} ${rolePart}${newBadge}</div>
+    <div class="kcard-meta">${m.prof} · ${m.focus[0]||''}</div>
+    <div class="kcard-tags"><span class="pill ${pc}" style="font-size:9px;padding:1px 5px">${profCat(m.prof)}</span>${troikaCount}</div>
+    ${warnHtml}
+    <div class="kcard-actions">
+      <button class="ka-btn btn-profile">Profile</button>
+      <button class="ka-btn btn-hold">Hold</button>
+    </div>`;
+
+  card.querySelector('.btn-profile').addEventListener('click',()=>openProfile(m.id));
+  card.querySelector('.btn-hold').addEventListener('click',()=>moveCard(m.id,colId,'holding'));
+
+  card.addEventListener('dragstart',e=>{
+    dragState={id:m.id,fromCol:colId};
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain',m.id);
+    setTimeout(()=>card.classList.add('dragging'),0);
+  });
+  card.addEventListener('dragend',()=>{
+    card.classList.remove('dragging');
+    document.querySelectorAll('.col-body').forEach(el=>el.classList.remove('drag-over'));
+  });
+
+  return card;
+}
+
+function moveCard(id,fromCol,toCol){
+  if(colKey(fromCol)===colKey(toCol)) return;
+  // Remove from source
+  if(fromCol==='holding'){
+    holding=holding.filter(x=>x!==id);
+  } else {
+    const g=groups.find(x=>x.id===fromCol);
+    if(g) g.members=g.members.filter(x=>x!==id);
+  }
+  // Add to dest
+  if(toCol==='holding'){
+    if(!holding.includes(id)) holding.push(id);
+  } else {
+    const g=groups.find(x=>x.id===toCol);
+    if(g&&!g.members.includes(id)) g.members.push(id);
+  }
+  renderBoard();
+}
+
+function addHoldingToGroup(gid){
+  if(holding.length===0){showToast('Holding is empty');return;}
+  const id=holding.shift();
+  const g=groups.find(x=>x.id===gid);
+  if(g&&!g.members.includes(id)) g.members.push(id);
+  renderBoard();
+}
+
+function deleteGroup(gid){
+  const g=groups.find(x=>x.id===gid);
+  if(g){
+    g.members.forEach(id=>{if(!holding.includes(id))holding.push(id);});
+    groups=groups.filter(x=>x.id!==gid);
+  }
+  renderBoard();
+}
+
+function addTroikaCol(){
+  groups.push({id:colIdCounter++,title:'Troika '+(groups.length+1),members:[],locked:false});
+  renderBoard();
+}
+
+function updateBoardBadge(){
+  document.getElementById('board-badge').textContent=groups.length;
+}
+
+function copyResults(){
+  if(groups.length===0){showToast('Generate troikas first');return;}
+  let text='TROIKA ASSIGNMENTS — East Valley Phoenix, June 11, 2026\n';
+  text+='='.repeat(52)+'\n\n';
+  groups.forEach((g,i)=>{
+    text+=`${g.title}${g.locked?' (locked)':''}\n`;
+    g.members.forEach(id=>{
+      const m=findMember(id);
+      if(m) text+=`  • ${m.name}${m.role?' ('+m.role+')':''}  —  ${m.prof}: ${m.focus[0]||''}${walkins.find(w=>w.id===m.id)?' [walk-in]':''}\n`;
+    });
+    text+='\n';
+  });
+  if(holding.length>0){
+    text+=`Holding (unassigned)\n`;
+    holding.forEach(id=>{
+      const m=findMember(id);
+      if(m) text+=`  • ${m.name}\n`;
+    });
+  }
+  navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard ✓')).catch(()=>showToast('Copy failed — please use Ctrl+A manually'));
+}
+
+function refreshOptedOutBanner(){
+  const skipIds=new Set(constraints.filter(c=>c.type==='skip').flatMap(c=>c.members));
+  const allMembers=[...getAllRosterMembers(),...walkins];
+  const notInPool=allMembers.filter(m=>skipIds.has(m.id)||!attendance[m.id]);
+  const banner=document.getElementById('board-opted-out');
+  const names=document.getElementById('board-opted-names');
+  if(notInPool.length>0){
+    banner.style.display='';
+    names.textContent=notInPool.map(m=>(skipIds.has(m.id)?m.name+' (opted out)':m.name+' (absent)')).join(' · ');
+  } else {
+    banner.style.display='none';
+  }
+}
+
+// ============================================================
+// SAVE & HISTORY
+// ============================================================
+const STORAGE_KEY='provisors_evp_history';
+
+function loadHistory(){
+  try {
+    const raw=localStorage.getItem(STORAGE_KEY);
+    return raw?JSON.parse(raw):[];
+  } catch(e){ return []; }
+}
+
+function saveHistory(sessions){
+  try { localStorage.setItem(STORAGE_KEY,JSON.stringify(sessions)); } catch(e){ showToast('Storage error — history may not persist'); }
+}
+
+function deleteSession(id){
+  const history=loadHistory().filter(s=>s.id!==id);
+  saveHistory(history);
+  renderHistory();
+  updateHistBadge();
+}
+
+function formatDate(iso){
+  if(!iso) return '—';
+  const [y,m,d]=iso.split('-');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m)-1]+' '+parseInt(d)+', '+y;
+}
+
+function updateHistBadge(){
+  const n=loadHistory().length;
+  document.getElementById('hist-badge').textContent=n;
+  document.getElementById('hist-badge').style.background=n>0?'var(--accent)':'var(--text3)';
+}
+
+function renderHistory(){
+  const history=loadHistory();
+  const container=document.getElementById('hist-container');
+
+  // Stats
+  const totalTroikas=history.reduce((s,sess)=>s+sess.troikas.length,0);
+  const allNames=new Set();
+  history.forEach(sess=>sess.troikas.forEach(t=>t.members.forEach(m=>allNames.add(m.name))));
+  document.getElementById('h-sessions').textContent=history.length;
+  document.getElementById('h-troikas').textContent=totalTroikas;
+  document.getElementById('h-members').textContent=allNames.size;
+  document.getElementById('h-last').textContent=history.length>0?formatDate(history[0].date):'—';
+  updateHistBadge();
+
+  if(history.length===0){
+    container.innerHTML='<div class="hist-empty">No saved assignments yet.<br>Generate troikas on the board, then click "Save assignment".</div>';
+    return;
+  }
+
+  // Group by year-month for the monthly view
+  const byMonth={};
+  history.forEach(sess=>{
+    const [y,m]=sess.date.split('-');
+    const key=y+'-'+m;
+    if(!byMonth[key]) byMonth[key]={label:monthLabel(y,m),sessions:[]};
+    byMonth[key].sessions.push(sess);
+  });
+
+  container.innerHTML='';
+  Object.values(byMonth).forEach(group=>{
+    const monthDiv=document.createElement('div');
+    monthDiv.className='hist-month';
+
+    const hdr=document.createElement('div');
+    hdr.className='hist-month-hdr';
+    hdr.innerHTML=`<div class="hist-month-title">${group.label}</div><div class="hist-month-meta">${group.sessions.length} session${group.sessions.length!==1?'s':''}</div>`;
+    monthDiv.appendChild(hdr);
+
+    group.sessions.forEach(sess=>{
+      const sessEl=document.createElement('div');
+      sessEl.className='hist-session';
+
+      // Header row (clickable to expand)
+      const sessHdr=document.createElement('div');
+      sessHdr.className='hist-session-hdr';
+      const unassignedNote=sess.unassigned&&sess.unassigned.length>0?` · ${sess.unassigned.length} unassigned`:'';
+      sessHdr.innerHTML=`
+        <div class="hist-session-date">${formatDate(sess.date)}</div>
+        <div style="font-size:12px;color:var(--accent);font-weight:600">${sess.label}</div>
+        <div class="hist-session-counts">${sess.troikas.length} troikas · ${sess.totalPresent} members${unassignedNote}</div>
+        <div style="font-size:11px;color:var(--text3)">Saved ${new Date(sess.savedAt).toLocaleDateString()}</div>
+        <span class="hist-session-chevron">›</span>`;
+      sessEl.appendChild(sessHdr);
+
+      // Body (troika list)
+      const sessBody=document.createElement('div');
+      sessBody.className='hist-session-body';
+
+      sess.troikas.forEach((t,i)=>{
+        const row=document.createElement('div');
+        row.className='hist-troika-row';
+        const chips=t.members.map(m=>`<span class="hist-chip${t.locked?' locked':''}" title="${m.prof}${m.focus?': '+m.focus:''}">${m.name}${m.role?' ('+m.role+')':''}${m.walkin?' ★':''}</span>`).join('');
+        row.innerHTML=`<div class="hist-troika-num">${t.title}${t.locked?' 🔒':''}</div><div class="hist-troika-members">${chips}</div>`;
+        sessBody.appendChild(row);
+      });
+
+      if(sess.unassigned&&sess.unassigned.length>0){
+        const unRow=document.createElement('div');
+        unRow.className='hist-troika-row';
+        unRow.innerHTML=`<div class="hist-troika-num" style="color:var(--text3)">Holding</div><div class="hist-troika-members">${sess.unassigned.map(n=>`<span class="hist-chip" style="opacity:0.6">${n}</span>`).join('')}</div>`;
+        sessBody.appendChild(unRow);
+      }
+
+      // Delete button at bottom
+      const delRow=document.createElement('div');
+      delRow.style.cssText='padding:10px 0 2px;display:flex;justify-content:flex-end';
+      const delBtn=document.createElement('button');
+      delBtn.className='hist-del-btn';
+      delBtn.textContent='Delete this session';
+      delBtn.addEventListener('click',()=>{
+        delBtn.textContent='Click again to confirm';
+        delBtn.style.background='var(--danger-bg)';
+        delBtn.onclick=()=>deleteSession(sess.id);
+      });
+      delRow.appendChild(delBtn);
+      sessBody.appendChild(delRow);
+
+      sessEl.appendChild(sessBody);
+
+      // Toggle expand
+      sessHdr.addEventListener('click',()=>{
+        const isOpen=sessBody.classList.contains('open');
+        sessBody.classList.toggle('open',!isOpen);
+        sessHdr.querySelector('.hist-session-chevron').classList.toggle('open',!isOpen);
+      });
+
+      monthDiv.appendChild(sessEl);
+    });
+
+    container.appendChild(monthDiv);
+  });
+}
+
+function monthLabel(y,m){
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return months[parseInt(m)-1]+' '+y;
+}
+
+// TOAST
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+// ============================================================
+// ROSTER MANAGEMENT
+// ============================================================
+const ROSTER_KEY='provisors_evp_roster_additions'; // localStorage for members added at runtime
+let rosterAdditions=[]; // extra members added via form or CSV (stored in localStorage)
+let pendingImport=[];   // rows parsed from CSV awaiting confirmation
+
+function loadRosterAdditions(){
+  try{ const r=localStorage.getItem(ROSTER_KEY); return r?JSON.parse(r):[]; }
+  catch(e){ return []; }
+}
+function saveRosterAdditions(){
+  try{ localStorage.setItem(ROSTER_KEY,JSON.stringify(rosterAdditions)); }
+  catch(e){ showToast('Storage error'); }
+}
+
+// Full roster = hardcoded MEMBERS + localStorage additions
+function getAllRosterMembers(){
+  return [...MEMBERS,...rosterAdditions];
+}
+
+// Also expose to findMember (already checks walkins, needs to check rosterAdditions)
+// Override findMember to include rosterAdditions
+function findMember(id){
+  return MEMBERS.find(x=>x.id===id)||walkins.find(x=>x.id===id)||rosterAdditions.find(x=>x.id===id);
+}
+
+const OUR_GROUP='East Valley Phoenix 5';
+const GROUPS_KEY='provisors_known_groups';
+let knownGroups=[];
+
+function loadKnownGroups(){
+  try{ const g=localStorage.getItem(GROUPS_KEY); return g?JSON.parse(g):[]; }
+  catch(e){ return []; }
+}
+function saveKnownGroups(){
+  try{ localStorage.setItem(GROUPS_KEY,JSON.stringify(knownGroups)); }
+  catch(e){}
+}
+function addKnownGroup(name){
+  const n=name.trim();
+  if(!n||n===OUR_GROUP) return;
+  if(!knownGroups.some(g=>g.toLowerCase()===n.toLowerCase())){
+    knownGroups.unshift(n);
+    if(knownGroups.length>200) knownGroups=knownGroups.slice(0,200);
+    saveKnownGroups();
+  }
+}
+
+function toggleGroupField(){
+  const checked=document.getElementById('am-our-group').checked;
+  document.getElementById('am-other-group-row').style.display=checked?'none':'block';
+  if(checked){
+    document.getElementById('am-group').value='';
+    document.getElementById('group-suggestions').style.display='none';
+  }
+}
+
+function groupAutocomplete(){
+  const val=(document.getElementById('am-group').value||'').toLowerCase().trim();
+  const sugg=document.getElementById('group-suggestions');
+  if(!val){ sugg.style.display='none'; return; }
+  const matches=knownGroups.filter(g=>g.toLowerCase().includes(val)).slice(0,8);
+  if(!matches.length){ sugg.style.display='none'; return; }
+  sugg.innerHTML=matches.map((g,i)=>`<div data-idx="${i}" style="padding:7px 12px;font-size:12px;cursor:pointer;border-bottom:1px solid var(--border)" onmousedown="selectGroupSugg('${g.replace(/'/g,"\\'")}') " onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">${g}</div>`).join('');
+  sugg.style.display='block';
+}
+
+function selectGroupSugg(name){
+  document.getElementById('am-group').value=name;
+  document.getElementById('group-suggestions').style.display='none';
+}
+
+function groupKeydown(e){
+  const sugg=document.getElementById('group-suggestions');
+  if(e.key==='Escape'){ sugg.style.display='none'; }
+  if(e.key==='Enter' && sugg.style.display!=='none'){
+    const first=sugg.querySelector('[data-idx="0"]');
+    if(first){ selectGroupSugg(first.textContent); e.preventDefault(); }
+  }
+}
+
+function rosterStats(){
+  const all=getAllRosterMembers();
+  const active=all.filter(m=>!m.inactive).length;
+  const inactive=all.filter(m=>m.inactive).length;
+  const added=rosterAdditions.length;
+  document.getElementById('r-total').textContent=all.length;
+  document.getElementById('r-active').textContent=active;
+  document.getElementById('r-inactive').textContent=inactive;
+  document.getElementById('r-added').textContent=added;
+  document.getElementById('roster-badge').textContent=all.length;
+  document.getElementById('roster-badge').style.background=all.length>0?'var(--accent)':'var(--text3)';
+}
+
+function renderRosterTable(){
+  const q=(document.getElementById('r-search').value||'').toLowerCase();
+  const filter=document.getElementById('r-filter').value;
+  const all=sortAlpha(getAllRosterMembers());
+  const filtered=all.filter(m=>{
+    const mq=!q||m.name.toLowerCase().includes(q)||m.prof.toLowerCase().includes(q)||(m.company||'').toLowerCase().includes(q)||(m.groups||'').toLowerCase().includes(q);
+    const mf=filter==='all'||(filter==='active'&&!m.inactive)||(filter==='inactive'&&m.inactive);
+    return mq&&mf;
+  });
+  const tbody=document.getElementById('roster-tbody');
+  const isAdded=id=>rosterAdditions.some(m=>m.id===id);
+  tbody.innerHTML=filtered.map(m=>{
+    const pc=profClass(m.prof);
+    const added=isAdded(m.id);
+    const groupStr=(m.groups||'').split(',')[0].trim()||'—';
+    const isOurGroup=m.groups&&m.groups.toLowerCase().includes(OUR_GROUP.toLowerCase());
+    return `<tr class="${m.inactive?'inactive':''} ${added?'added-member':''}">
+      <td><span class="status-dot ${m.inactive?'dot-inactive':added?'dot-new':'dot-active'}"></span></td>
+      <td style="font-weight:600;white-space:nowrap">${m.name}${m.role?` <span style="font-size:10px;color:var(--text3)">(${m.role})</span>`:''}</td>
+      <td><span class="pill ${pc}" style="font-size:10px;white-space:nowrap">${m.prof}</span></td>
+      <td style="color:var(--text2);font-size:12px">${m.company||'—'}</td>
+      <td style="color:var(--text2);font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(m.focus||[]).join(', ')||'—'}</td>
+      <td style="font-size:11px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis" title="${m.groups||''}">
+        ${isOurGroup?`<span style="color:var(--accent);font-weight:500;font-size:10px">● Our group</span>`:`<span style="color:var(--text2)">${groupStr}</span>`}
+      </td>
+      <td style="color:var(--text3);font-size:11px;white-space:nowrap">${m.ms||'—'}</td>
+      <td>
+        <button class="ka-btn" onclick="toggleInactive('${m.id}')" style="font-size:10px">${m.inactive?'Reactivate':'Deactivate'}</button>
+      </td>
+      <td>
+        ${added?`<button class="ka-btn" onclick="removeAddedMember('${m.id}')" style="color:var(--danger);font-size:10px">Remove</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+  rosterStats();
+}
+
+function toggleInactive(id){
+  // For built-in MEMBERS, track inactive state directly on the object (session-only)
+  const inBuiltIn=MEMBERS.find(m=>m.id===id);
+  if(inBuiltIn){ inBuiltIn.inactive=!inBuiltIn.inactive; }
+  // For roster additions, toggle and persist
+  const inAdded=rosterAdditions.find(m=>m.id===id);
+  if(inAdded){ inAdded.inactive=!inAdded.inactive; saveRosterAdditions(); }
+  renderRosterTable();
+  renderAttendance();
+}
+
+function removeAddedMember(id){
+  rosterAdditions=rosterAdditions.filter(m=>m.id!==id);
+  delete attendance[id];
+  saveRosterAdditions();
+  renderRosterTable();
+  rebuildConstraintSelects();
+}
+
+// ADD MEMBER FORM
+function showAddMemberForm(){
+  document.getElementById('add-member-form').style.display='block';
+  document.getElementById('am-name').focus();
+  document.getElementById('am-error').style.display='none';
+  // Default: checked = our group
+  document.getElementById('am-our-group').checked=true;
+  document.getElementById('am-other-group-row').style.display='none';
+  document.getElementById('am-group').value='';
+}
+function hideAddMemberForm(){
+  document.getElementById('add-member-form').style.display='none';
+  ['am-name','am-title','am-company','am-focus','am-role','am-bio','am-group'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('am-prof').value='';
+  document.getElementById('am-our-group').checked=true;
+  document.getElementById('am-other-group-row').style.display='none';
+  document.getElementById('group-suggestions').style.display='none';
+}
+
+function addMemberFromForm(){
+  const name=document.getElementById('am-name').value.trim();
+  const prof=document.getElementById('am-prof').value;
+  if(!name||!prof){ document.getElementById('am-error').style.display=''; return; }
+  document.getElementById('am-error').style.display='none';
+
+  // Check for duplicate name
+  if(getAllRosterMembers().some(m=>m.name.toLowerCase()===name.toLowerCase())){
+    showToast(name+' already exists in roster'); return;
+  }
+
+  // Determine group
+  const isOurGroup=document.getElementById('am-our-group').checked;
+  const groupVal=isOurGroup?OUR_GROUP:(document.getElementById('am-group').value.trim()||OUR_GROUP);
+  if(!isOurGroup && groupVal!==OUR_GROUP) addKnownGroup(groupVal);
+
+  const focus=document.getElementById('am-focus').value.trim().split(',').map(s=>s.trim()).filter(Boolean);
+  const now=new Date();
+  const ms=now.toLocaleString('default',{month:'short'})+' '+now.getFullYear();
+  const member={
+    id:'roster_'+Date.now(),
+    name,
+    role:document.getElementById('am-role').value.trim(),
+    title:document.getElementById('am-title').value.trim()||prof,
+    company:document.getElementById('am-company').value.trim()||'—',
+    prof,
+    focus:focus.length?focus:['—'],
+    groups:groupVal,
+    ms,
+    skipped:false,
+    inactive:false,
+    bio:document.getElementById('am-bio').value.trim()||'',
+    t:[]
+  };
+  rosterAdditions.push(member);
+  attendance[member.id]=false;
+  saveRosterAdditions();
+  hideAddMemberForm();
+  renderRosterTable();
+  rebuildConstraintSelects();
+  showToast(name+' added to roster ✓');
+}
+
+// CSV IMPORT
+function csvDragOver(e){ e.preventDefault(); document.getElementById('csv-drop').classList.add('dragover'); }
+function csvDragLeave(){ document.getElementById('csv-drop').classList.remove('dragover'); }
+function csvDrop(e){ e.preventDefault(); csvDragLeave(); const f=e.dataTransfer.files[0]; if(f) readCsvFile(f); }
+function csvFileSelected(e){ const f=e.target.files[0]; if(f) readCsvFile(f); e.target.value=''; }
+
+function readCsvFile(file){
+  const reader=new FileReader();
+  reader.onload=e=>{ parseAndPreviewCsv(e.target.result); };
+  reader.readAsText(file);
+}
+
+function parseCsvPaste(){
+  const text=document.getElementById('csv-paste').value.trim();
+  if(!text){ showToast('Paste CSV data first'); return; }
+  parseAndPreviewCsv(text);
+}
+
+function detectSep(line){
+  const tabs=line.split('\t').length-1;
+  const commas=line.split(',').length-1;
+  const pipes=line.split('|').length-1;
+  if(tabs>=commas&&tabs>=pipes) return '\t';
+  if(pipes>=commas) return '|';
+  return ',';
+}
+
+function parseAndPreviewCsv(text){
+  const lines=text.trim().split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length<2){ showToast('Need at least a header row and one data row'); return; }
+  const sep=detectSep(lines[0]);
+  const headers=lines[0].split(sep).map(h=>h.trim().replace(/^"|"$/g,'').toLowerCase());
+
+  // Flexible column detection
+  const colIdx={};
+  const matchers={
+    name:['name','member info','member name','full name'],
+    prof:['profession','prof'],
+    focus:['professional focus','focus','specialty','specialization'],
+    company:['company','firm','organization','employer'],
+    title:['title','role','position','job title'],
+    bio:['short bio','bio','about','description'],
+    ms:['member since','since','joined','join date'],
+    role:['badge','role badge','designation']
+  };
+  Object.entries(matchers).forEach(([key,terms])=>{
+    const idx=headers.findIndex(h=>terms.some(t=>h.includes(t)));
+    if(idx>=0) colIdx[key]=idx;
+  });
+
+  if(colIdx.name===undefined){ showToast('Could not find a "Name" column in the CSV'); return; }
+
+  const existing=getAllRosterMembers();
+  pendingImport=[];
+
+  for(let i=1;i<lines.length;i++){
+    // Handle quoted fields
+    const row=parseCsvRow(lines[i],sep);
+    const get=k=>colIdx[k]!==undefined?(row[colIdx[k]]||'').trim():'';
+    const name=get('name');
+    if(!name||name.toLowerCase()==='name') continue;
+
+    const existingMember=existing.find(m=>m.name.toLowerCase()===name.toLowerCase());
+    const focusRaw=get('focus');
+    const focus=focusRaw?focusRaw.split(';').map(s=>s.trim()).filter(Boolean):['—'];
+    const prof=get('prof')||'Other';
+
+    if(existingMember){
+      // Potential update
+      const changes=[];
+      if(prof&&prof!==existingMember.prof) changes.push('profession: '+prof);
+      if(get('company')&&get('company')!==existingMember.company) changes.push('company: '+get('company'));
+      if(get('title')&&get('title')!==existingMember.title) changes.push('title: '+get('title'));
+      pendingImport.push({type:'update',name,existingId:existingMember.id,prof,focus,company:get('company'),title:get('title'),bio:get('bio'),ms:get('ms'),changes});
+    } else {
+      pendingImport.push({type:'new',name,prof,focus,company:get('company'),title:get('title'),bio:get('bio'),ms:get('ms'),role:get('role'),changes:[]});
+    }
+  }
+
+  if(pendingImport.length===0){ showToast('No valid rows found'); return; }
+  renderCsvPreview();
+}
+
+function parseCsvRow(line,sep){
+  if(sep!==',') return line.split(sep).map(v=>v.trim().replace(/^"|"$/g,''));
+  const result=[];let cur='';let inQ=false;
+  for(const c of line){
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){result.push(cur.trim());cur='';}
+    else{cur+=c;}
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function renderCsvPreview(){
+  const panel=document.getElementById('csv-preview-panel');
+  const rows=document.getElementById('csv-preview-rows');
+  const title=document.getElementById('csv-preview-title');
+  const newCount=pendingImport.filter(r=>r.type==='new').length;
+  const updCount=pendingImport.filter(r=>r.type==='update'&&r.changes.length).length;
+  const skipCount=pendingImport.filter(r=>r.type==='update'&&!r.changes.length).length;
+  title.textContent=`${pendingImport.length} rows · ${newCount} new · ${updCount} updates · ${skipCount} unchanged`;
+  rows.innerHTML=pendingImport.map((r,i)=>{
+    const badge=r.type==='new'?'<span class="import-badge ib-new">New</span>':
+      r.changes.length?'<span class="import-badge ib-update">Update</span>':
+      '<span class="import-badge ib-skip">No change</span>';
+    const detail=r.changes.length?`<span style="font-size:11px;color:var(--text2)"> · ${r.changes.join(', ')}</span>`:'';
+    return `<div class="import-row ${r.type==='new'?'new-row':r.changes.length?'conflict':''}">
+      ${badge}
+      <span style="font-weight:600;font-size:12px">${r.name}</span>
+      <span style="font-size:11px;color:var(--text2)">${r.prof}</span>
+      ${detail}
+      <button class="ka-btn" style="margin-left:auto;color:var(--danger);font-size:10px" onclick="removePendingRow(${i})">Skip</button>
+    </div>`;
+  }).join('');
+  panel.style.display='block';
+}
+
+function removePendingRow(i){
+  pendingImport.splice(i,1);
+  if(pendingImport.length===0){ clearCsvPreview(); return; }
+  renderCsvPreview();
+}
+
+function clearCsvPreview(){
+  pendingImport=[];
+  document.getElementById('csv-preview-panel').style.display='none';
+  document.getElementById('csv-paste').value='';
+}
+
+function applyImport(){
+  let added=0,updated=0;
+  pendingImport.forEach(r=>{
+    if(r.type==='new'){
+      const existing=getAllRosterMembers().find(m=>m.name.toLowerCase()===r.name.toLowerCase());
+      if(existing) return;
+      const now=new Date();
+      const ms=r.ms||(now.toLocaleString('default',{month:'short'})+' '+now.getFullYear());
+      const member={
+        id:'roster_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+        name:r.name,role:r.role||'',title:r.title||r.prof,company:r.company||'—',
+        prof:r.prof,focus:r.focus.length?r.focus:['—'],ms,
+        skipped:false,inactive:false,bio:r.bio||'',t:[]
+      };
+      rosterAdditions.push(member);
+      attendance[member.id]=false;
+      added++;
+    } else if(r.type==='update'&&r.changes.length){
+      const inAdded=rosterAdditions.find(m=>m.id===r.existingId);
+      const inBuiltin=MEMBERS.find(m=>m.id===r.existingId);
+      const target=inAdded||inBuiltin;
+      if(target){
+        if(r.prof) target.prof=r.prof;
+        if(r.company) target.company=r.company;
+        if(r.title) target.title=r.title;
+        if(r.focus.length&&r.focus[0]!=='—') target.focus=r.focus;
+        if(r.bio) target.bio=r.bio;
+        updated++;
+      }
+    }
+  });
+  saveRosterAdditions();
+  clearCsvPreview();
+  renderRosterTable();
+  rebuildConstraintSelects();
+  showToast(`Import complete · ${added} added · ${updated} updated ✓`);
+}
+
+// NEW MEETING RESET
+function showNewMeetingConfirm(){
+  const panel=document.getElementById('new-meeting-confirm');
+  panel.style.display='block';
+  const today=new Date();
+  const yyyy=today.getFullYear();
+  const mm=String(today.getMonth()+1).padStart(2,'0');
+  const dd=String(today.getDate()).padStart(2,'0');
+  document.getElementById('new-meeting-date').value=`${yyyy}-${mm}-${dd}`;
+}
+function hideNewMeetingConfirm(){
+  document.getElementById('new-meeting-confirm').style.display='none';
+}
+
+function startNewMeeting(){
+  const dateVal=document.getElementById('new-meeting-date').value;
+  // Reset attendance
+  const all=getAllRosterMembers();
+  all.forEach(m=>{ attendance[m.id]=false; });
+  walkins.forEach(m=>{ delete attendance[m.id]; });
+  walkins=[];
+  // Reset constraints to empty (user will re-add for the new meeting)
+  constraints=[];
+  // Reset board
+  groups=[];
+  holding=[];
+  colIdCounter=1;
+  // Set board date
+  if(dateVal) document.getElementById('board-date').value=dateVal;
+  hideNewMeetingConfirm();
+  renderAttendance();
+  renderConstraints();
+  rebuildConstraintSelects();
+  const boardEl=document.getElementById('kanban-board');
+  boardEl.innerHTML='<div style="color:var(--text3);font-size:13px;padding:40px 20px;text-align:center;width:100%">Click "Generate troikas" to create assignments from present members, then drag to adjust.</div>';
+  document.getElementById('save-btn').style.display='none';
+  updateBoardBadge();
+  checkSavedDate();
+  showToast('New meeting started'+(dateVal?' for '+formatDate(dateVal):'')+' · attendance and board cleared ✓');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  // Load persisted roster additions first
+  rosterAdditions=loadRosterAdditions();
+
+  // Initialize attendance for ALL members (built-in + roster additions)
+  getAllRosterMembers().forEach(m=>{ if(attendance[m.id]===undefined) attendance[m.id]=false; });
+
+  // Load known groups, seed from existing member data if first run
+  knownGroups=loadKnownGroups();
+  if(knownGroups.length===0){
+    const groupSet=new Set();
+    MEMBERS.forEach(m=>{
+      (m.groups||'').split(',').forEach(g=>{
+        const t=g.trim();
+        if(t&&t!==OUR_GROUP&&!t.includes('(')) groupSet.add(t);
+      });
+    });
+    knownGroups=[...groupSet].sort();
+    saveKnownGroups();
+  }
+
+  // Rebuild pair history now that rosterAdditions are loaded
+  rebuildPairHistory();
+
+  // Refresh profile filters to include any new profession types
+  initProfileFilters();
+  initProfileStats();
+  renderProfiles();
+  renderAttendance();
+  renderConstraints();
+  rebuildConstraintSelects();
+  updateConstraintUI();
+  updateBoardBadge();
+  updateHistBadge();
+  rosterStats();
+}
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const tabs={profiles:0,attendance:1,board:2,history:3,roster:4};
+  if(tabs[name]!==undefined) document.querySelectorAll('.nav-tab')[tabs[name]].classList.add('active');
+  if(name==='board'){
+    updateBoardBadge();
+    refreshOptedOutBanner();
+    if(!document.getElementById('board-date').value){
+      const today=new Date();
+      const yyyy=today.getFullYear();
+      const mm=String(today.getMonth()+1).padStart(2,'0');
+      const dd=String(today.getDate()).padStart(2,'0');
+      document.getElementById('board-date').value=`${yyyy}-${mm}-${dd}`;
+    }
+    checkSavedDate();
+  }
+  if(name==='history') renderHistory();
+  if(name==='roster'){ renderRosterTable(); }
+}
+
+init();
+</script>
+</body>
+</html>
